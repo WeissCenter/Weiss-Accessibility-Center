@@ -1,5 +1,6 @@
 # Weiss Accessibility Center
 
+**USWDS+ is required to use the Weiss Accessibility Center**
   
 A reusable Angular component for managing accessibility options such as font size, theme, layout, spacing, and language. The component allows for flexible configuration with default options that can be customized or overridden as needed.
 
@@ -16,8 +17,6 @@ A reusable Angular component for managing accessibility options such as font siz
 -  **Layout Customization**: Modify layout for user comfort.
 
 -  **Spacing Control**: Adjust spacing between elements.
-
--  **Language Support**: Add multi-language options for accessibility.
 
 -  **Flexible Configuration**: Build off of default options or pass in specific, partial configurations.
 
@@ -109,7 +108,7 @@ The options object can be partial or full. Defaults are built into the component
 ```typescript
 
 this.options = {
-  displayType: 'panel', // Can be 'panel', 'strip', or 'popover'
+  displayType: 'panel', // Can be 'panel' or 'strip'
   overlay: true,
   position: 'right',
   include: ['fontSize', 'theme', 'spacing'],
@@ -178,7 +177,7 @@ The options object supports customization for several modules such as font size,
 |:--|:--|:--|
 | **title** | The title of the accessibility center | 'Accessibility Center'
 | **description** | A brief description of the accessibility center | 'Adjust accessibility settings.'
-| **displayType** | The display type of the accessibility center ('panel', 'strip', 'popover') | 'panel'
+| **displayType** | The display type of the accessibility center ('panel', 'strip') | 'panel'
 | **overlay** | Whether to display an overlay when the accessibility center is open | true
 | **position** | The position of the accessibility center ('left', 'right') | 'right'
 | **include** | The modules to include in the accessibility center ('fontSize', 'spacing', 'theme', 'layout') | ['fontSize', 'theme', 'spacing']
