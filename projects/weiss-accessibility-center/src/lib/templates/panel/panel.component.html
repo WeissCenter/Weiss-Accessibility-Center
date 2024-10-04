@@ -1,0 +1,152 @@
+<section aria-labelledby="accessibilityCenterTitle" class="weiss-accessibility-center-panel" [ngClass]="{'weiss-accessibility-center-panel--right': data?.position === 'end' || data?.position === 'right', 'weiss-accessibility-center-panel--left': data?.position === 'start' || data?.position === 'left'}">
+    <div class="weiss-accessibility-center-panel__header display-flex flex-column">
+        <div class="display-flex flex-align-start gap-1 flex-justify">
+            <h2 id="accessibilityCenterTitle" class="margin-0">
+                {{data?.title}}
+            </h2>
+            <button type="button" class="usa-button usa-button--unstyled width-auto text-no-underline margin-left-auto"
+                #closeButton (click)="close()">
+                Close
+                <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M18 6l-12 12" />
+                    <path d="M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <p>{{data?.description}}</p>
+    </div>
+    <div class="display-flex flex-1 overflow-auto flex-column weiss-accessibility-center-panel__content">
+        <ul class="display-flex flex-column usa-list usa-list--unstyled">
+            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.fontSize" >
+                <h3 class="usa-accordion__heading">
+                    <button type="button" class="usa-accordion__button display-flex flex-align-center gap-1" 
+                    aria-controls="accessibilityText" >
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2.25"
+                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 7v-2h13v2" />
+                    <path d="M10 5v14" />
+                    <path d="M12 19h-4" />
+                    <path d="M15 13v-1h6v1" />
+                    <path d="M18 12v7" />
+                    <path d="M17 19h2" />
+                </svg>
+                        {{data?.modules?.fontSize?.title}}
+                    </button>
+                </h3>
+                <div id="accessibilityText" class="usa-accordion__content usa-prose" [hidden]="!expand['fontSize']">
+                    <form>
+                        <fieldset class="usa-fieldset usa-prose display-flex flex-column gap-05 usa-prose">
+                            <legend class="usa-legend margin-top-0 margin-bottom-2">
+                                {{data?.modules?.fontSize?.description}}
+                            </legend>
+                            <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.fontSize?.data">
+                                <input class="usa-radio__input usa-radio__input--tile"
+                                    id="accessibility-font-size-{{item.value}}" type="radio"
+                                    name="accessibility-font-size"
+                                    [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.fontSize"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ fontSize: $event })"
+                                    [value]="item.value" />
+                                <label class="usa-radio__label"
+                                    for="accessibility-font-size-{{item.value}}">{{item.name}}</label>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </li>
+            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.spacing" >
+                <h3 class="usa-accordion__heading">
+                    <button type="button" class="usa-accordion__button display-flex flex-align-center gap-1" 
+                    aria-controls="accessibilitySpacing" >
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7l4 -4l4 4" /><path d="M8 17l4 4l4 -4" /><path d="M12 3l0 18" /></svg>
+                        {{data?.modules?.spacing?.title}}
+                    </button>
+                </h3>
+                <div id="accessibilitySpacing" class="usa-accordion__content usa-prose" [hidden]="!expand['spacing']">
+                    <form>
+                        <fieldset class="usa-fieldset usa-prose display-flex flex-column gap-05 usa-prose">
+                            <legend class="usa-legend margin-top-0 margin-bottom-2">
+                                {{data?.modules?.spacing?.description}}
+                            </legend>
+                            <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.spacing?.data">
+                                <input class="usa-radio__input usa-radio__input--tile"
+                                    id="accessibility-spacing-{{item.value}}" type="radio"
+                                    name="accessibility-spacing"
+                                    [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.spacing"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ spacing: $event })"
+                                    [value]="item.value" />
+                                <label class="usa-radio__label"
+                                    for="accessibility-spacing-{{item.value}}">{{item.name}}</label>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </li>
+            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.theme">
+                <h3 class="usa-accordion__heading">
+                    <button type="button" class="usa-accordion__button display-flex flex-align-center gap-1"
+                        aria-controls="accessibilityTheme">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2.25"
+                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 3h-4a2 2 0 0 0 -2 2v12a4 4 0 0 0 8 0v-12a2 2 0 0 0 -2 -2" /><path d="M13 7.35l-2 -2a2 2 0 0 0 -2.828 0l-2.828 2.828a2 2 0 0 0 0 2.828l9 9" /><path d="M7.3 13h-2.3a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h12" /><path d="M17 17l0 .01" /></svg>
+                        {{data?.modules?.theme?.title}}
+                    </button>
+                </h3>
+                <div id="accessibilityTheme" [hidden]="!expand['theme']" class="usa-accordion__content usa-prose">
+                    <form>
+                        <fieldset class="usa-fieldset usa-prose display-flex flex-column gap-05 usa-prose">
+                            <legend class="usa-legend margin-top-0 margin-bottom-2">
+                                {{data?.modules?.theme?.description}}
+                            </legend>
+                            <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.theme?.data">
+                                <input class="usa-radio__input usa-radio__input--tile"
+                                    id="accessibility-theme-{{item.value}}" type="radio" name="accessibility-theme"
+                                    [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.theme"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ theme: $event })"
+                                    [value]="item.value" />
+                                <label class="usa-radio__label"
+                                    for="accessibility-theme-{{item.value}}">{{item.name}}</label>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </li>
+            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.layout">
+                <h3 class="usa-accordion__heading">
+                    <button type="button" class="usa-accordion__button display-flex flex-align-center gap-1" 
+                        aria-controls="accessibilityLayout">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M12 4l0 16" /></svg>
+                        {{data?.modules?.layout?.title}}
+                    </button>
+                </h3>
+                <div id="accessibilityLayout" [hidden]="!expand['layout']" class="usa-accordion__content usa-prose">
+                    <form>
+                        <fieldset class="usa-fieldset usa-prose display-flex flex-column gap-05 usa-prose">
+                            <legend class="usa-legend margin-top-0 margin-bottom-2">
+                                {{data?.modules?.layout?.description}}
+                            </legend>
+                            <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.layout?.data">
+                                <input class="usa-radio__input usa-radio__input--tile"
+                                    id="accessibility-layout-{{item.value}}" type="radio" name="accessibility-layout"
+                                    [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.layout"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ layout: $event })"
+                                    [value]="item.value" />
+                                <label class="usa-radio__label"
+                                    for="accessibility-layout-{{item.value}}">{{item.name}}</label>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="display-flex margin-top-2 gap-2 padding-x-2 padding-bottom-2">
+        <button type="button" class="usa-button usa-button--unstyled"
+            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys);statusMessageChange.emit('Setting reset has been applied')">Reset
+            all settings</button>
+        <button type="button" class="usa-button usa-button--unstyled" (click)="close()">Close</button>
+    </div>

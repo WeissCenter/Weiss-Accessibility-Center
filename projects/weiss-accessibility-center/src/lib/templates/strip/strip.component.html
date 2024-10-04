@@ -1,0 +1,131 @@
+<section class="weiss-accessibility-center-strip-wrapper" aria-labelledby="accessibilityCenterTitle"
+    [ngClass]="{'weiss-accessibility-center-strip--right': data?.position === 'end' || data?.position === 'right', 'weiss-accessibility-center-strip--left': data?.position === 'start' || data?.position === 'left'}">
+    <div class="weiss-accessibility-center-strip">
+        <h2 id="accessibilityCenterTitle" class="visually-hidden">{{data?.title}}</h2>
+        <button tabindex="1" #closeButton aria-controls="accessibilityCenter" type="button"
+            style="flex-direction: column;top:var(--usa-spacing-1)" class="usa-button padding-1 usa-button--unstyled "
+            (click)="close()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24"
+                viewBox="0 0 24 24" stroke-width="3" style="width:var(--usa-spacing-3);height:var(--usa-spacing-3)"
+                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+            </svg>
+            Close
+        </button>
+        <div class="content">
+            <button type="button" tabindex="2"
+                [ngClass]="{'bg-a11y-active': (weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.fontSize !== 'default'}"
+                style="flex-direction: column;"
+                class="usa-button padding-y-105 padding-x-105 usa-button--unstyled width-full"
+                *ngIf="data?.modules?.fontSize" 
+                (click)="toggleModule('fontSize')"
+                aria-describedby="fontSizeDescriptor">
+                <span class="display-inline-block">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-text-size" width="24" height="24"
+                        style="--usa-button-icon-size:var(--usa-spacing-4)" viewBox="0 0 24 24" stroke-width="2.25"
+                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M3 7v-2h13v2" />
+                        <path d="M10 5v14" />
+                        <path d="M12 19h-4" />
+                        <path d="M15 13v-1h6v1" />
+                        <path d="M18 12v7" />
+                        <path d="M17 19h2" />
+                    </svg>
+                </span>
+                {{data?.modules?.fontSize?.title}}
+            </button>
+            <span class="visually-hidden" id="fontSizeDescriptor">{{data?.modules?.fontSize?.description}}</span>
+
+
+            <button type="button" tabindex="4"
+            (click)="toggleModule('spacing')"
+                [ngClass]="{'bg-a11y-active': (weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.spacing !== 'default'}"
+                style="flex-direction: column;"
+                class="usa-button padding-y-105 padding-x-105 usa-button--unstyled width-full"
+                *ngIf="data?.modules?.spacing" aria-describedby="spacingDescriptor">
+                <span class="display-inline-block">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-text-size" width="24" height="24"
+                        style="--usa-button-icon-size:var(--usa-spacing-4)" viewBox="0 0 24 24" stroke-width="2.25"
+                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M8 7l4 -4l4 4" />
+                        <path d="M8 17l4 4l4 -4" />
+                        <path d="M12 3l0 18" />
+                    </svg>
+                </span>
+                {{data?.modules?.spacing?.title}}
+            </button>
+            <span class="visually-hidden" id="spacingDescriptor">{{data?.modules?.spacing?.description}}</span>
+
+            <button type="button" tabindex="6"
+            (click)="toggleModule('theme')"
+                [ngClass]="{'bg-a11y-active': (weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.theme !== 'default'}"
+                style="flex-direction: column;"
+                class="usa-button padding-y-105 padding-x-105 usa-button--unstyled width-full"
+                *ngIf="data?.modules?.theme" aria-describedby="themeDescriptor">
+                <span class="display-inline-block">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-text-size" width="24" height="24"
+                        style="--usa-button-icon-size:var(--usa-spacing-4)" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M19 3h-4a2 2 0 0 0 -2 2v12a4 4 0 0 0 8 0v-12a2 2 0 0 0 -2 -2" />
+                        <path d="M13 7.35l-2 -2a2 2 0 0 0 -2.828 0l-2.828 2.828a2 2 0 0 0 0 2.828l9 9" />
+                        <path d="M7.3 13h-2.3a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h12" />
+                        <path d="M17 17l0 .01" />
+                    </svg>
+                </span>
+                {{data?.modules?.theme?.title}}
+            </button>
+            <span class="visually-hidden" id="themeDescriptor">{{data?.modules?.theme?.description}}</span>
+
+            <button type="button" tabindex="8"
+            (click)="toggleModule('layout')"
+                [ngClass]="{'bg-a11y-active': (weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.layout !== 'default'}"
+                style="flex-direction: column;"
+                class="usa-button padding-y-105 padding-x-105 usa-button--unstyled width-full"
+                *ngIf="data?.modules?.layout" aria-describedby="layoutDescriptor">
+                <span class="display-inline-block">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-text-size" width="24" height="24"
+                        style="--usa-button-icon-size:var(--usa-spacing-4)" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                        <path d="M12 4l0 16" />
+                    </svg>
+                </span>
+                {{data?.modules?.layout?.title}}
+            </button>
+            <span class="visually-hidden" id="layoutDescriptor">{{data?.modules?.layout?.description}}</span>
+        </div>
+        <button type="button" style="flex-direction: column;"
+            class="usa-button padding-y-105 padding-x-205 usa-button--unstyled width-full" tabindex="10"
+            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys);statusMessageChange.emit('Setting reset has been applied')">Reset</button>
+
+    </div>
+    <div class="weiss-accessibility-center-strip-selection-panel" *ngIf="showSelectionPanel">
+        <form>
+            <ng-container *ngFor="let module of moduleKeys" >
+                <fieldset class="usa-fieldset usa-prose display-flex flex-column gap-05 usa-prose" *ngIf="selectedModule === module">
+                    <legend class="usa-legend margin-top-0 margin-bottom-2">
+                        {{data?.modules?.[module]?.description}}
+                    </legend>
+                    <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.[module]?.data">
+                        <input [tabIndex]="dynamicTabIndexValue" class="usa-radio__input usa-radio__input--tile"
+                            id="accessibility-{{module}}-{{item.value}}" type="radio" name="accessibility-{{module}}"
+                            [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.[module]"
+                            (ngModelChange)="onSettingsChange(module, $event)" [value]="item.value" />
+                        <label class="usa-radio__label"
+                            for="accessibility-{{module}}-{{item.value}}">{{item.name}}</label>
+                    </div>
+                </fieldset>
+            </ng-container>
+        </form>
+    </div>
+</section>
