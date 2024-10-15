@@ -2,7 +2,15 @@
 *
 
 # Include only the necessary files and directories
-!dist/weiss-accessibility-center/**
+!esm2022/**
+!esm2022/**/*
+!fesm2022/**
+!lib/**
+!lib/**/*
+!src/lib/**
+!src/lib/**/*
+!index.d.ts
+!public_api.d.ts
 !package.json
 !README.md
 !LICENSE
