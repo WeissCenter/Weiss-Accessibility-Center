@@ -1,31 +1,16 @@
 {
   "name": "weiss-accessibility-center",
   "version": "1.0.0",
-  "description": "A library for accessibility enhancements.",
-  "author": "Mark Zebley <mzebley@aemcorp.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/WeissCenter/Weiss-Accessibility-Center.git"
-  },
-  "keywords": [
-    "angular",
-    "accessibility",
-    "library"
-  ],
-  "main": "fesm2022/weiss-accessibility-center.mjs",
-  "module": "fesm2022/weiss-accessibility-center.mjs",
-  "es2020": "fesm2022/weiss-accessibility-center.mjs",
-  "esm2022": "esm2022/weiss-accessibility-center.mjs",
-  "typings": "index.d.ts",
-  "sideEffects": false,
   "peerDependencies": {
-    "@angular/common": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
+    "@angular/common": "^15.0.0 ||^16.0.0 || ^17.0.0 || ^18.0.0",
     "@angular/core": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
+  "sideEffects": false,
+  "module": "fesm2022/weiss-accessibility-center.mjs",
+  "typings": "index.d.ts",
   "exports": {
     "./package.json": {
       "default": "./package.json"

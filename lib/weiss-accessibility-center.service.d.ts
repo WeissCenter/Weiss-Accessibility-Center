@@ -26,4 +26,3 @@ export declare class WeissAccessibilityCenterService {
     static ɵfac: i0.ɵɵFactoryDeclaration<WeissAccessibilityCenterService, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<WeissAccessibilityCenterService>;
 }
-//# sourceMappingURL=weiss-accessibility-center.service.d.ts.map

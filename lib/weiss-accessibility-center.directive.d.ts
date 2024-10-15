@@ -17,4 +17,3 @@ export declare class WeissAccessibilityToggleDirective implements OnInit, OnDest
     static ɵfac: i0.ɵɵFactoryDeclaration<WeissAccessibilityToggleDirective, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<WeissAccessibilityToggleDirective, "[weissA11yToggle]", never, { "targetId": { "alias": "weissA11yToggle"; "required": false; }; }, {}, never, never, false, never>;
 }
-//# sourceMappingURL=weiss-accessibility-center.directive.d.ts.map

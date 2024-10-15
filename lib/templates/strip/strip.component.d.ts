@@ -21,4 +21,3 @@ export declare class StripComponent {
     static ɵfac: i0.ɵɵFactoryDeclaration<StripComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<StripComponent, "weiss-accessibility-strip", never, { "data": { "alias": "data"; "required": false; }; "closeSelectionPanel": { "alias": "closeSelectionPanel"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, false, never>;
 }
-//# sourceMappingURL=strip.component.d.ts.map

@@ -17,4 +17,3 @@ export declare class PanelComponent {
     static ɵfac: i0.ɵɵFactoryDeclaration<PanelComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<PanelComponent, "weiss-accessibility-panel", never, { "data": { "alias": "data"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, false, never>;
 }
-//# sourceMappingURL=panel.component.d.ts.map

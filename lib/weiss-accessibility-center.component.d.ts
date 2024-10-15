@@ -33,4 +33,3 @@ export declare class WeissAccessibilityCenterComponent {
     static ɵfac: i0.ɵɵFactoryDeclaration<WeissAccessibilityCenterComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<WeissAccessibilityCenterComponent, "weiss-accessibility-center", never, { "options": { "alias": "options"; "required": false; }; "title": { "alias": "title"; "required": false; }; "description": { "alias": "description"; "required": false; }; "displayType": { "alias": "displayType"; "required": false; }; "overlay": { "alias": "overlay"; "required": false; }; "position": { "alias": "position"; "required": false; }; "modules": { "alias": "modules"; "required": false; }; "fontSize": { "alias": "fontSize"; "required": false; }; "theme": { "alias": "theme"; "required": false; }; "spacing": { "alias": "spacing"; "required": false; }; "layout": { "alias": "layout"; "required": false; }; }, {}, never, never, false, never>;
 }
-//# sourceMappingURL=weiss-accessibility-center.component.d.ts.map

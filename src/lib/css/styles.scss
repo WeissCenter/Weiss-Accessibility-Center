@@ -1,0 +1,21 @@
+@import 'a11y-font-sizes';
+@import 'a11y-spacing';
+@import 'a11y-themes';
+@import 'a11y-layout';
+
+:root {
+    --weiss-accessibility-center-overlay-background: var(--usa-modal-overlay-background-color);
+    --weiss-accessibility-center-button-open-background-color: var(--usa-color-yellow-vivid-10);
+    --weiss-accessibility-center-button-open-color: var(--usa-ink);
+  
+}
+
+.background-overlay {
+    position: fixed;
+    z-index: 998;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--weiss-accessibility-center-overlay-background);
+}

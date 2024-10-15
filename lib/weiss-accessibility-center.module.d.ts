@@ -10,4 +10,3 @@ export declare class WeissAccessibilityCenterModule {
     static ɵmod: i0.ɵɵNgModuleDeclaration<WeissAccessibilityCenterModule, [typeof i1.WeissAccessibilityCenterComponent, typeof i2.WeissAccessibilityToggleDirective, typeof i3.StripComponent, typeof i4.PanelComponent], [typeof i5.CommonModule, typeof i6.FormsModule, typeof i5.AsyncPipe], [typeof i1.WeissAccessibilityCenterComponent, typeof i2.WeissAccessibilityToggleDirective]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<WeissAccessibilityCenterModule>;
 }
-//# sourceMappingURL=weiss-accessibility-center.module.d.ts.map

@@ -38,4 +38,3 @@ export interface PanelData {
         [key in ModuleTypes]?: ModuleOptions;
     };
 }
-//# sourceMappingURL=weiss-accessibility-center.interfaces.d.ts.map
