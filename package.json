@@ -3,16 +3,27 @@
   "version": "1.0.1",
   "peerDependencies": {
     "@angular/common": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
-    "@angular/core": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
+    "@angular/core": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
+    "@angular/forms": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
+    "rxjs": "^7.8.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.10"
   },
   "main": "dist/weiss-accessibility-center.js",
-  "module": "dist/esm2022/weiss-accessibility-center.mjs",
-  "typings": "dist/index.d.ts",
+  "module": "fesm2022/weiss-accessibility-center.mjs",
+  "typings": "index.d.ts",
   "sideEffects": false,
-  "scripts": {
-    "build": "ng-packagr -p ng-package.json"
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./esm2022/weiss-accessibility-center.mjs",
+      "esm": "./esm2022/weiss-accessibility-center.mjs",
+      "default": "./fesm2022/weiss-accessibility-center.mjs"
+    }
   }
 }
