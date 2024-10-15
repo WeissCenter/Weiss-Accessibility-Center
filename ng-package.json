@@ -15,5 +15,6 @@
       "input": "src/lib",
       "output": "assets"
     }
-  ]
+  ],
+  "allowedNonPeerDependencies": ["tslib", "zone.js"]
 }

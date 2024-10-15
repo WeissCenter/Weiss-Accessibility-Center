@@ -1,0 +1,144 @@
+[data-weiss-accessibility-layout='mobile'] {
+    .accessibility-layout,
+    .accessibility-layout.display-flex.flex-row {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        align-content: flex-start;
+    }
+
+    .usa-layout-docs__sidenav.accessibility-layout {
+        display: none;
+    }
+
+    .accessibility-margin-left-0 {
+        margin-left: 0;
+    }
+
+    .accessibility-layout>*,
+    .accessibility-layout.usa-card-group>*,
+    .accessibility-layout.display-flex.flex-row>* {
+        flex: 1;
+        flex-basis: 100%;
+        width: 100%;
+    }
+
+    @media (min-width: 40em) {
+        .usa-graphic-list .usa-graphic-list__row:last-child .usa-media-block {
+            margin-bottom: var(--usa-spacing-8);
+        }
+    }
+
+    .accessibility-layout.usa-table thead {
+        display: none
+    }
+
+    .accessibility-layout.usa-table th,
+    .accessibility-layout.usa-table td {
+        border-bottom-width: 0;
+        display: block;
+        width: 100%
+    }
+
+    .accessibility-layout.usa-table tr {
+        border-bottom: calc(var(--usa-table-border-width) * 3) solid var(--usa-table-border-color);
+        border-top-width: 0;
+        display: block;
+        width: 100%
+    }
+
+    .accessibility-layout.usa-table tr th:first-child,
+    .accessibility-layout.usa-table tr td:first-child {
+        border-top-width: 0
+    }
+
+    .accessibility-layout.usa-table tr:nth-child(odd) td,
+    .accessibility-layout.usa-table tr:nth-child(odd) th {
+        // background-color: inherit
+    }
+
+    .accessibility-layout.usa-table tr:first-child th:first-child,
+    .accessibility-layout.usa-table tr:first-child td:first-child {
+        border-top: calc(var(--usa-table-border-width) * 2) solid var(--usa-table-border-color)
+    }
+
+    .accessibility-layout.usa-table th[data-label],
+    .accessibility-layout.usa-table td[data-label] {
+        padding-bottom: var(--usa-table-cell-padding-y)
+    }
+
+    .accessibility-layout.usa-table th[data-label]:before,
+    .accessibility-layout.usa-table td[data-label]:before {
+        content: attr(data-label);
+        display: block;
+        font-weight: var(--usa-font-weight-bold);
+        font-size: var(--usa-font-size-xs);
+        margin: var(--usa-spacing-neg-1) var(--usa-spacing-neg-2) var(--usa-spacing-0);
+        padding: var(--usa-table-cell-padding-y) var(--usa-table-cell-padding-x)
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header thead {
+        display: none
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header th,
+    .accessibility-layout.usa-table.usa-table--stacked-header td {
+        border-bottom-width: 0;
+        display: block;
+        width: 100%
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header tr {
+        border-bottom: var(--usa-table-border-width) solid var(--usa-table-border-color);
+        border-top-width: 0;
+        display: block;
+        width: 100%
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header tr th:first-child,
+    .accessibility-layout.usa-table.usa-table--stacked-header tr td:first-child {
+        border-top-width: 0
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header tr:nth-child(odd) td,
+    .accessibility-layout.usa-table.usa-table--stacked-header tr:nth-child(odd) th {
+        background-color: inherit
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header tr:first-child th:first-child,
+    .accessibility-layout.usa-table.usa-table--stacked-header tr:first-child td:first-child {
+        border-top: var(--usa-table-border-width) solid var(--usa-table-border-color)
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header th[data-label],
+    .accessibility-layout.usa-table.usa-table--stacked-header td[data-label] {
+        padding-bottom: var(--usa-table-cell-padding-y)
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header th[data-label]:before,
+    .accessibility-layout.usa-table.usa-table--stacked-header td[data-label]:before {
+        content: attr(data-label);
+        display: block;
+        font-weight: var(--usa-font-weight-bold);
+        font-size: var(--usa-font-size-xs);
+        margin: var(--usa-spacing-neg-1) var(--usa-spacing-neg-2) var(--usa-spacing-0);
+        padding: var(--usa-table-cell-padding-y) var(--usa-table-cell-padding-x)
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header tr td:first-child,
+    .accessibility-layout.usa-table.usa-table--stacked-header tr th:first-child {
+        font-family: var(--usa-font-body);
+        font-size: var(--usa-font-size-h4);
+        line-height: var(--usa-line-height-heading);
+        background-color: var(--usa-table-border-color);
+        color: var(--usa-white);
+        font-weight: var(--usa-font-weight-normal);
+        padding: var(--usa-table-cell-padding-y) var(--usa-table-cell-padding-x)
+    }
+
+    .accessibility-layout.usa-table.usa-table--stacked-header tr td:first-child:before,
+    .accessibility-layout.usa-table.usa-table--stacked-header tr th:first-child:before {
+        display: none
+    }
+  }
