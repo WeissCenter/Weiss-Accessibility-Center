@@ -1,35 +1,21 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "paths": {
-      "weiss-accessibility-center": ["./dist/weiss-accessibility-center"]
-    },
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
+    "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
-    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "importHelpers": true,
-    "inlineSources": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
-    "lib": ["ES2022", "dom"]
+    "target": "es2020",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "types": []
   },
   "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "enableIvy": true
   },
-  "exclude": ["**/*.spec.ts"]
+  "exclude": ["dist", "node_modules"]
 }
