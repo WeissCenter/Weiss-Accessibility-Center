@@ -7,13 +7,12 @@
     --a11y-line-height-modifier: 1.4;
     --a11y-letter-spacing-modifier: 2;
     --a11y-spacing-modifier: 1.2;
-    --weiss-accessibility-panel-max-width: var(--usa-spacing-mobile-lg) !important;
 }
 
 [data-weiss-accessibility-spacing="extra-comfort"] {
     --a11y-line-height-modifier: 1.4;
-    --a11y-letter-spacing-modifier: 3;
-    --a11y-spacing-modifier: 1.4;
+    --a11y-letter-spacing-modifier: 2;
+    --a11y-spacing-modifier: 1.325;
     --weiss-accessibility-panel-max-width: var(--usa-spacing-mobile-lg) !important;
 }
 
