@@ -1,12 +1,13 @@
 import * as i0 from '@angular/core';
-import { Injectable, EventEmitter, Component, ViewEncapsulation, Input, Output, ViewChild, HostListener, Directive, NgModule } from '@angular/core';
+import { Injectable, Inject, EventEmitter, Component, ViewEncapsulation, Input, Output, ViewChild, HostListener, Directive, NgModule } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import * as i2 from '@angular/common';
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { DOCUMENT, CommonModule, AsyncPipe } from '@angular/common';
 import * as i3 from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 
 class WeissAccessibilityCenterService {
+    document;
     weissAccessibilityThemes = [
         { name: 'Default light', value: 'default' },
         { name: 'Default dark', value: 'dynamic-dark' },
@@ -63,7 +64,7 @@ class WeissAccessibilityCenterService {
                 targetElement.closest('button, [tabindex]') || targetElement;
         }
         if (!this.target) {
-            this.target = document.getElementById('weiss-a11y-toggle');
+            this.target = this.document.getElementById('weiss-a11y-toggle');
         }
         // If widget has been closed, return focus to the the target
         if (!this.showWeissAccessibilityCenter.value) {
@@ -73,7 +74,8 @@ class WeissAccessibilityCenterService {
             }
         }
     }
-    constructor() {
+    constructor(document) {
+        this.document = document;
         // On service initialization, load saved settings or use default ones
         const savedSettings = this.getSavedSettings();
         // Initialize BehaviorSubject with the saved/default settings
@@ -116,7 +118,7 @@ class WeissAccessibilityCenterService {
     }
     // Method to apply the accessibility settings to the root element (HTML)
     applySettings(settings) {
-        const root = document.documentElement; // Get the root HTML element
+        const root = this.document.documentElement; // Get the root HTML element
         // Apply font size, theme, spacing, and language settings as attributes
         root.setAttribute('data-weiss-accessibility-font-size', settings.fontSize);
         root.setAttribute('data-weiss-accessibility-theme', settings.theme);
@@ -168,7 +170,7 @@ class WeissAccessibilityCenterService {
         // Fallback to a default language if no match is found
         return 'en';
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, deps: [{ token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, decorators: [{
@@ -176,7 +178,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
             args: [{
                     providedIn: 'root',
                 }]
-        }], ctorParameters: () => [] });
+        }], ctorParameters: () => [{ type: Document, decorators: [{
+                    type: Inject,
+                    args: [DOCUMENT]
+                }] }] });
 
 function createAccessibilityOptions(service) {
     return {

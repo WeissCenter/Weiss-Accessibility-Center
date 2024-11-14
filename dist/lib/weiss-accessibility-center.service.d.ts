@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { WeissAccessibilitySettings, ModuleDataOptions } from './weiss-accessibility-center.interfaces';
 import * as i0 from "@angular/core";
 export declare class WeissAccessibilityCenterService {
+    private document;
     weissAccessibilityThemes: ModuleDataOptions[];
     weissAccessibilityFontSizes: ModuleDataOptions[];
     weissAccessibilitySpacing: ModuleDataOptions[];
@@ -14,7 +15,7 @@ export declare class WeissAccessibilityCenterService {
     private showWeissAccessibilityCenter;
     showWeissAccessibilityCenter$: Observable<boolean>;
     toggleWeissAccessibilityCenter(targetElement?: HTMLElement | null, forceClose?: boolean): void;
-    constructor();
+    constructor(document: Document);
     updateSettings(newSettings: Partial<WeissAccessibilitySettings>): void;
     getCurrentSettings(): WeissAccessibilitySettings;
     private getSavedSettings;
