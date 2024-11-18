@@ -153,7 +153,7 @@ class WeissAccessibilityCenterService {
         }
     }
     getBrowserLanguage() {
-        if (window && window.navigator && (window.navigator.language || window.navigator.languages[0])) {
+        if (navigator && (navigator.language || navigator.languages[0])) {
             const language = navigator.language || navigator.languages[0];
             return this.normalizeLanguageCode(language);
         }
