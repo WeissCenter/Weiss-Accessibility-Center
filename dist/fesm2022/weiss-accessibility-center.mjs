@@ -153,8 +153,11 @@ class WeissAccessibilityCenterService {
         }
     }
     getBrowserLanguage() {
-        const language = navigator.language || navigator.languages[0];
-        return this.normalizeLanguageCode(language);
+        if (navigator && (navigator.language || navigator.languages[0])) {
+            const language = navigator.language || navigator.languages[0];
+            return this.normalizeLanguageCode(language);
+        }
+        return 'en';
     }
     // Normalize the language code (e.g., "en-US" -> "en")
     normalizeLanguageCode(languageCode) {
