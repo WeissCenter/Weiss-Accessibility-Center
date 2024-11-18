@@ -192,7 +192,7 @@ export class WeissAccessibilityCenterService {
 
   getBrowserLanguage(): string {
 
-    if(window.navigator && (window.navigator.language || window.navigator.languages[0])){
+    if(window && (window.navigator.language || window.navigator.languages[0])){
       const language = navigator.language || navigator.languages[0];
       return this.normalizeLanguageCode(language);
     }
