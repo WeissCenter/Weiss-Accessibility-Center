@@ -4,6 +4,9 @@ import {
   Input,
   Output,
   ViewEncapsulation,
+  ViewChildren,
+  ElementRef,
+  QueryList
 } from '@angular/core';
 import {
   PanelData,
@@ -20,6 +23,21 @@ import { WeissAccessibilityCenterService } from '../../weiss-accessibility-cente
 export class PanelComponent {
   @Input() data: PanelData | undefined;
   @Output() statusMessageChange = new EventEmitter<string>();
+
+  @ViewChildren('accordionButton') accordionButtons!: QueryList<ElementRef>;
+
+handleKeyboardEvent(event: KeyboardEvent, sectionId: string) {
+  // Check if the key pressed is Enter or Space
+  if (event.key === 'Enter' || event.key === ' ') {
+    // Use setTimeout to ensure the content is rendered before scrolling
+    setTimeout(() => {
+      const contentElement = document.getElementById(sectionId);
+      if (contentElement && this.expand[sectionId]) {
+        contentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 100);
+  }
+}
 
   public moduleKeys: ModuleTypes[] = [];
 

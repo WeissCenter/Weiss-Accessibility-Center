@@ -26,13 +26,13 @@ A reusable Angular component for managing accessibility options such as font siz
 
   
 
-Install the package via npm:
+Install the package directly from the GitHub repository via npm:
 
   
 
 ```bash
 
-npm  install  weiss-accessibility-center  --save
+npm install git+https://github.com/WeissCenter/Weiss-Accessibility-Center#v1.0.1
 
 ```
 
@@ -62,6 +62,14 @@ bootstrap: [AppComponent]
 })
 
 export  class  AppModule {}
+
+```
+
+In your project's main stylesheet, import the accessibility center styles:
+
+```scss
+
+@import '../node_modules/weiss-accessibility-center/assets/index.scss';
 
 ```
 

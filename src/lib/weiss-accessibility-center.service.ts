@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { WeissAccessibilitySettings, ModuleDataOptions } from './weiss-accessibility-center.interfaces';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -77,7 +78,7 @@ export class WeissAccessibilityCenterService {
         targetElement.closest('button, [tabindex]') || targetElement;
     }
     if (!this.target) {
-      this.target = document.getElementById('weiss-a11y-toggle');
+      this.target = this.document.getElementById('weiss-a11y-toggle');
     }
     // If widget has been closed, return focus to the the target
     if (!this.showWeissAccessibilityCenter.value) {
@@ -88,7 +89,7 @@ export class WeissAccessibilityCenterService {
     }
   }
 
-  constructor() {
+  constructor(@Inject(DOCUMENT) private document: Document) {
     // On service initialization, load saved settings or use default ones
     const savedSettings = this.getSavedSettings();
 
@@ -148,7 +149,7 @@ export class WeissAccessibilityCenterService {
 
   // Method to apply the accessibility settings to the root element (HTML)
   private applySettings(settings: WeissAccessibilitySettings): void {
-    const root = document.documentElement; // Get the root HTML element
+    const root = this.document.documentElement; // Get the root HTML element
 
     // Apply font size, theme, spacing, and language settings as attributes
     root.setAttribute('data-weiss-accessibility-font-size', settings.fontSize);
@@ -190,8 +191,13 @@ export class WeissAccessibilityCenterService {
   }
 
   getBrowserLanguage(): string {
-    const language = navigator.language || navigator.languages[0];
-    return this.normalizeLanguageCode(language);
+
+    if(window && (window?.navigator?.language || window?.navigator?.languages?.[0])){
+      const language = navigator.language || navigator.languages[0];
+      return this.normalizeLanguageCode(language);
+    }
+
+    return 'en';
   }
 
   // Normalize the language code (e.g., "en-US" -> "en")
