@@ -295,6 +295,8 @@ html[data-weiss-accessibility-theme="high-contrast"] {
   --usa-pagination-button-current-background-color: var(--high-contrast-action);
   --usa-pagination-button-current-border-color: var(--high-contrast-action);
 
+  --usa-alert-background-color: var(--usa-black);
+
   .usa-pagination .usa-current {
     color: var(--usa-black);
   }
