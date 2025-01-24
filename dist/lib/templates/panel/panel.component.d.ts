@@ -1,12 +1,14 @@
-import { EventEmitter, ElementRef, QueryList } from '@angular/core';
-import { PanelData, ModuleTypes } from '../../weiss-accessibility-center.interfaces';
-import { WeissAccessibilityCenterService } from '../../weiss-accessibility-center.service';
+import { EventEmitter, ElementRef, QueryList } from "@angular/core";
+import { PanelData, ModuleTypes } from "../../weiss-accessibility-center.interfaces";
+import { WeissAccessibilityCenterService } from "../../weiss-accessibility-center.service";
 import * as i0 from "@angular/core";
 export declare class PanelComponent {
     weissAccessibilityCenterService: WeissAccessibilityCenterService;
     data: PanelData | undefined;
     statusMessageChange: EventEmitter<string>;
+    panelContent: ElementRef;
     accordionButtons: QueryList<ElementRef>;
+    handleTabNavigation(event: KeyboardEvent): void;
     handleKeyboardEvent(event: KeyboardEvent, sectionId: string): void;
     moduleKeys: ModuleTypes[];
     expand: {
