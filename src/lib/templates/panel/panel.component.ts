@@ -6,38 +6,62 @@ import {
   ViewEncapsulation,
   ViewChildren,
   ElementRef,
-  QueryList
-} from '@angular/core';
+  QueryList,
+  ViewChild,
+  HostListener,
+} from "@angular/core";
 import {
   PanelData,
   ModuleTypes,
-} from '../../weiss-accessibility-center.interfaces';
-import { WeissAccessibilityCenterService } from '../../weiss-accessibility-center.service';
+} from "../../weiss-accessibility-center.interfaces";
+import { WeissAccessibilityCenterService } from "../../weiss-accessibility-center.service";
 
 @Component({
-  selector: 'weiss-accessibility-panel',
-  templateUrl: './panel.component.html',
-  styleUrl: './panel.component.scss',
+  selector: "weiss-accessibility-panel",
+  templateUrl: "./panel.component.html",
+  styleUrl: "./panel.component.scss",
   encapsulation: ViewEncapsulation.None,
 })
 export class PanelComponent {
   @Input() data: PanelData | undefined;
   @Output() statusMessageChange = new EventEmitter<string>();
+  @ViewChild("accessibilityPanel") panelContent!: ElementRef;
+  @ViewChildren("accordionButton") accordionButtons!: QueryList<ElementRef>;
 
-  @ViewChildren('accordionButton') accordionButtons!: QueryList<ElementRef>;
-
-handleKeyboardEvent(event: KeyboardEvent, sectionId: string) {
-  // Check if the key pressed is Enter or Space
-  if (event.key === 'Enter' || event.key === ' ') {
-    // Use setTimeout to ensure the content is rendered before scrolling
-    setTimeout(() => {
-      const contentElement = document.getElementById(sectionId);
-      if (contentElement && this.expand[sectionId]) {
-        contentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }, 100);
+  @HostListener("keydown", ["$event"])
+  handleTabNavigation(event: KeyboardEvent) {
+    if (event.key === "Tab") {
+      // Wait for DOM update
+      setTimeout(() => {
+        const activeElement = document.activeElement;
+        if (
+          activeElement &&
+          this.panelContent.nativeElement.contains(activeElement)
+        ) {
+          activeElement.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
+        }
+      }, 0);
+    }
   }
-}
+
+  handleKeyboardEvent(event: KeyboardEvent, sectionId: string) {
+    // Check if the key pressed is Enter or Space
+    if (event.key === "Enter" || event.key === " ") {
+      // Wait for DOM update
+      setTimeout(() => {
+        const contentElement = document.getElementById(sectionId);
+        if (contentElement && this.expand[sectionId]) {
+          contentElement.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
+        }
+      }, 0);
+    }
+  }
 
   public moduleKeys: ModuleTypes[] = [];
 
@@ -56,7 +80,10 @@ handleKeyboardEvent(event: KeyboardEvent, sectionId: string) {
   ) {}
 
   public close(): void {
-    this.weissAccessibilityCenterService.toggleWeissAccessibilityCenter(null, true);
+    this.weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
+      null,
+      true
+    );
   }
 
   ngOnInit() {
