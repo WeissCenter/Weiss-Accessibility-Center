@@ -45,17 +45,6 @@ export class PanelComponent {
         ) {
           this.scrollElementIntoView(activeElement);
         }
-        // If it's a radio input, ensure its section is expanded
-        if (activeElement.getAttribute("type") === "radio") {
-          const section = activeElement.closest(".usa-accordion__content");
-          if (section) {
-            const sectionId = section.id;
-            const moduleType = this.getModuleTypeFromId(sectionId);
-            if (moduleType) {
-              this.expand[moduleType] = true;
-            }
-          }
-        }
       }, 0);
     }
   }
@@ -65,16 +54,6 @@ export class PanelComponent {
       behavior: "smooth",
       block: "center",
     });
-  }
-
-  private getModuleTypeFromId(id: string): ModuleTypes | null {
-    const moduleMap: { [key: string]: ModuleTypes } = {
-      'accessibilityText': 'fontSize',
-      'accessibilitySpacing': 'spacing',
-      'accessibilityTheme': 'theme',
-      'accessibilityLayout': 'layout'
-    };
-    return moduleMap[id] || null;
   }
 
   handleKeyboardEvent(event: KeyboardEvent, sectionId: string) {
