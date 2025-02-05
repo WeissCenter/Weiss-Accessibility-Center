@@ -27,10 +27,15 @@ export class PanelComponent {
   @Output() statusMessageChange = new EventEmitter<string>();
   @ViewChild("accessibilityPanel") panelContent!: ElementRef;
   @ViewChildren("accordionButton") accordionButtons!: QueryList<ElementRef>;
+  @ViewChildren("radioInput") radioInputs!: QueryList<ElementRef>;
 
   @HostListener("keydown", ["$event"])
   handleTabNavigation(event: KeyboardEvent) {
-    if (event.key === "Tab") {
+    if (
+      event.key === "Tab" ||
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown"
+    ) {
       // Wait for DOM update
       setTimeout(() => {
         const activeElement = document.activeElement;
@@ -38,13 +43,38 @@ export class PanelComponent {
           activeElement &&
           this.panelContent.nativeElement.contains(activeElement)
         ) {
-          activeElement.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-          });
+          this.scrollElementIntoView(activeElement);
+        }
+        // If it's a radio input, ensure its section is expanded
+        if (activeElement.getAttribute("type") === "radio") {
+          const section = activeElement.closest(".usa-accordion__content");
+          if (section) {
+            const sectionId = section.id;
+            const moduleType = this.getModuleTypeFromId(sectionId);
+            if (moduleType) {
+              this.expand[moduleType] = true;
+            }
+          }
         }
       }, 0);
     }
+  }
+
+  private scrollElementIntoView(element: Element) {
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
+
+  private getModuleTypeFromId(id: string): ModuleTypes | null {
+    const moduleMap: { [key: string]: ModuleTypes } = {
+      'accessibilityText': 'fontSize',
+      'accessibilitySpacing': 'spacing',
+      'accessibilityTheme': 'theme',
+      'accessibilityLayout': 'layout'
+    };
+    return moduleMap[id] || null;
   }
 
   handleKeyboardEvent(event: KeyboardEvent, sectionId: string) {
@@ -54,10 +84,7 @@ export class PanelComponent {
       setTimeout(() => {
         const contentElement = document.getElementById(sectionId);
         if (contentElement && this.expand[sectionId]) {
-          contentElement.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-          });
+          this.scrollElementIntoView(contentElement);
         }
       }, 0);
     }
@@ -95,5 +122,22 @@ export class PanelComponent {
         return acc;
       }, {} as { [key in ModuleTypes]?: boolean });
     }
+  }
+
+  ngAfterViewInit() {
+    // Set up observers for radio inputs
+    this.radioInputs.changes.subscribe(() => {
+      this.setupRadioInputs();
+    });
+    this.setupRadioInputs();
+  }
+
+  private setupRadioInputs() {
+    this.radioInputs.forEach(radioRef => {
+      const element = radioRef.nativeElement;
+      element.addEventListener('focus', () => {
+        this.scrollElementIntoView(element);
+      });
+    });
   }
 }

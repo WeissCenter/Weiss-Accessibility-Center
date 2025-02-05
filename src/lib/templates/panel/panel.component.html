@@ -47,6 +47,7 @@
                             <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.fontSize?.data">
                                 <input class="usa-radio__input usa-radio__input--tile"
                                     id="accessibility-font-size-{{item.value}}" type="radio"
+                                    #radioInput
                                     name="accessibility-font-size"
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.fontSize"
                                     (ngModelChange)="weissAccessibilityCenterService.updateSettings({ fontSize: $event })"
@@ -75,6 +76,7 @@
                             <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.spacing?.data">
                                 <input class="usa-radio__input usa-radio__input--tile"
                                     id="accessibility-spacing-{{item.value}}" type="radio"
+                                    #radioInput
                                     name="accessibility-spacing"
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.spacing"
                                     (ngModelChange)="weissAccessibilityCenterService.updateSettings({ spacing: $event })"
@@ -104,6 +106,7 @@
                             <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.theme?.data">
                                 <input class="usa-radio__input usa-radio__input--tile"
                                     id="accessibility-theme-{{item.value}}" type="radio" name="accessibility-theme"
+                                    #radioInput
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.theme"
                                     (ngModelChange)="weissAccessibilityCenterService.updateSettings({ theme: $event })"
                                     [value]="item.value" />
@@ -131,6 +134,7 @@
                             <div class="usa-radio margin-top-0" *ngFor="let item of data?.modules?.layout?.data">
                                 <input class="usa-radio__input usa-radio__input--tile"
                                     id="accessibility-layout-{{item.value}}" type="radio" name="accessibility-layout"
+                                    #radioInput
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.layout"
                                     (ngModelChange)="weissAccessibilityCenterService.updateSettings({ layout: $event })"
                                     [value]="item.value" />

@@ -8,7 +8,10 @@ export declare class PanelComponent {
     statusMessageChange: EventEmitter<string>;
     panelContent: ElementRef;
     accordionButtons: QueryList<ElementRef>;
+    radioInputs: QueryList<ElementRef>;
     handleTabNavigation(event: KeyboardEvent): void;
+    private scrollElementIntoView;
+    private getModuleTypeFromId;
     handleKeyboardEvent(event: KeyboardEvent, sectionId: string): void;
     moduleKeys: ModuleTypes[];
     expand: {
@@ -18,6 +21,8 @@ export declare class PanelComponent {
     constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService);
     close(): void;
     ngOnInit(): void;
+    ngAfterViewInit(): void;
+    private setupRadioInputs;
     static ɵfac: i0.ɵɵFactoryDeclaration<PanelComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<PanelComponent, "weiss-accessibility-panel", never, { "data": { "alias": "data"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, false, never>;
 }
