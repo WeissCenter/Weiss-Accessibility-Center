@@ -11,7 +11,6 @@ export declare class PanelComponent {
     radioInputs: QueryList<ElementRef>;
     handleTabNavigation(event: KeyboardEvent): void;
     private scrollElementIntoView;
-    private getModuleTypeFromId;
     handleKeyboardEvent(event: KeyboardEvent, sectionId: string): void;
     moduleKeys: ModuleTypes[];
     expand: {
