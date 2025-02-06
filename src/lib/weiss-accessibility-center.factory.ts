@@ -9,6 +9,7 @@ export function createAccessibilityOptions(service: WeissAccessibilityCenterServ
     include: ['fontSize', 'theme', 'spacing', 'layout'],
     title: 'Accessibility settings',
     description: 'Adjust the settings below to customize the appearance of this website.',
+    multiSelectableAccordions: false,
     fontSize: {
       title: 'Text size',
       description: 'The text-size setting allows you to adjust how big or small the words appear on the screen.',

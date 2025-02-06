@@ -62,6 +62,7 @@ export class WeissAccessibilityCenterComponent {
   @Input() theme: ModuleOptions | undefined;
   @Input() spacing: ModuleOptions | undefined;
   @Input() layout: ModuleOptions | undefined;
+  @Input() multiSelectableAccordions: boolean | undefined;
 
   // Merged options object that will be used within the component
   currentOptions: AccessibilityOptions;
@@ -109,9 +110,13 @@ export class WeissAccessibilityCenterComponent {
   // This method is triggered when the child component emits a new status message
   onStatusMessageChange(newMessage: string) {
     this.statusMessage = newMessage;
+  }
 
-    // Optional: Log the message to see the flow
-    console.log('Status message received from child:', newMessage);
+  private scrollElementIntoView(element: Element) {
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
   }
 
   // Close panel when user hits escape key
@@ -134,12 +139,26 @@ export class WeissAccessibilityCenterComponent {
             this.firstFocusableElement?.focus();
           }
         }
+        this.scrollElementIntoView(deepActiveElement);
       } else if (event.key === 'Escape') {
         this.weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
           null,
           true
         );
         this.statusMessage = "Accessibility center closed";
+      } else if (event.key === "ArrowUp" ||
+        event.key === "ArrowDown") {
+        // Wait for DOM update
+        setTimeout(() => {
+          const activeElement = document.activeElement;
+          if (
+            activeElement &&
+            this.centerEl.nativeElement.contains(activeElement)
+          ) {
+            this.scrollElementIntoView(activeElement);
+          }
+
+        }, 0);
       }
     }
   }
@@ -202,6 +221,12 @@ export class WeissAccessibilityCenterComponent {
       changes['position'].currentValue !== changes['position'].previousValue
     ) {
       this.setupOptions();
+    } else if (
+      changes['multiSelectableAccordions'] &&
+      changes['multiSelectableAccordions'].currentValue !==
+        changes['multiSelectableAccordions'].previousValue
+    ) {
+      this.setupOptions();
     }
   }
 
@@ -224,6 +249,9 @@ export class WeissAccessibilityCenterComponent {
     }
     if (this.overlay !== undefined) {
       mergedOptions.overlay = this.overlay;
+    }
+    if (this.multiSelectableAccordions) {
+      mergedOptions.multiSelectableAccordions = this.multiSelectableAccordions;
     }
     if (this.position) {
       mergedOptions.position = this.position;
@@ -268,8 +296,6 @@ export class WeissAccessibilityCenterComponent {
 
     // Now store the final merged options
     this.currentOptions = mergedOptions;
-
-    // Optional: log the merged options for debugging
     this.data = this.buildData();
 
   }
@@ -287,6 +313,7 @@ export class WeissAccessibilityCenterComponent {
       title: this.currentOptions.title || 'Accessibility settings',
       description: this.currentOptions.description || 'Adjust the settings below to customize the appearance of this website.',
       modules: moduleData,
+      multiSelectableAccordions: this.currentOptions.multiSelectableAccordions || false,
       position: this.currentOptions.position || 'end',
     };
     return data;

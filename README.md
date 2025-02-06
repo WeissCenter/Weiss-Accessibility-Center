@@ -120,6 +120,7 @@ this.options = {
   overlay: true,
   position: 'right',
   include: ['fontSize', 'theme', 'spacing'],
+  multiSelectableAccordions: false,
   fontSize: {
     title: 'Font Size',
     description: 'Adjust the font size.',
@@ -187,6 +188,7 @@ The options object supports customization for several modules such as font size,
 | **description** | A brief description of the accessibility center | 'Adjust accessibility settings.'
 | **displayType** | The display type of the accessibility center ('panel', 'strip') | 'panel'
 | **overlay** | Whether to display an overlay when the accessibility center is open | true
+| **multiSelectableAccordions** | Whether multiple accordion items can be open at the same time | false
 | **position** | The position of the accessibility center ('left', 'right') | 'right'
 | **include** | The modules to include in the accessibility center ('fontSize', 'spacing', 'theme', 'layout') | ['fontSize', 'theme', 'spacing']
 | **fontSize** | The font size module configuration | See below
