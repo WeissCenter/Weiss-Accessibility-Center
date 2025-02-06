@@ -1,12 +1,14 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { WeissAccessibilitySettings, ModuleDataOptions } from './weiss-accessibility-center.interfaces';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WeissAccessibilityCenterService {
+  // Browser check for SSR/clientside compatibility
+  private isBrowser: boolean;
   
   public weissAccessibilityThemes: ModuleDataOptions[] = [
     { name: 'Default light', value: 'default' },
@@ -89,7 +91,11 @@ export class WeissAccessibilityCenterService {
     }
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: Object
+    ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
     // On service initialization, load saved settings or use default ones
     const savedSettings = this.getSavedSettings();
 
@@ -107,22 +113,20 @@ export class WeissAccessibilityCenterService {
 
   // Method to update accessibility settings (partially or fully)
   updateSettings(newSettings: Partial<WeissAccessibilitySettings>): void {
-    // Merge the new settings with the current settings
     const updatedSettings = {
-      ...this.accessibilitySettingsSubject.value, // Current settings
-      ...newSettings, // New settings to update
+      ...this.accessibilitySettingsSubject.value,
+      ...newSettings,
     };
 
-    // Update the BehaviorSubject with the new settings
     this.accessibilitySettingsSubject.next(updatedSettings);
 
-    // Save the updated settings to localStorage
-    localStorage.setItem(
-      'weiss-accessibility-settings',
-      JSON.stringify(updatedSettings)
-    );
+    if (this.isBrowser) {
+      localStorage.setItem(
+        'weiss-accessibility-settings',
+        JSON.stringify(updatedSettings)
+      );
+    }
 
-    // Apply the updated settings to the document root
     this.applySettings(updatedSettings);
   }
 
@@ -133,18 +137,22 @@ export class WeissAccessibilityCenterService {
 
   // Method to get saved settings from localStorage or return default settings
   private getSavedSettings(): WeissAccessibilitySettings {
-    // Determine the default settings based on the browser language
     this.defaultWeissAccessibilitySettings.language = this.getSupportedLanguage();
 
-    // Attempt to load saved settings from localStorage
-    const savedSettings = JSON.parse(
-      localStorage.getItem('weiss-accessibility-settings') || 'null'
-    );
+    if (!this.isBrowser) {
+      return this.defaultWeissAccessibilitySettings;
+    }
 
-    // If saved settings exist, merge them with the default settings, else return default settings
-    return savedSettings
-      ? { ...this.defaultWeissAccessibilitySettings, ...savedSettings }
-      : this.defaultWeissAccessibilitySettings;
+    try {
+      const savedSettings = JSON.parse(
+        localStorage.getItem('weiss-accessibility-settings') || 'null'
+      );
+      return savedSettings
+        ? { ...this.defaultWeissAccessibilitySettings, ...savedSettings }
+        : this.defaultWeissAccessibilitySettings;
+    } catch {
+      return this.defaultWeissAccessibilitySettings;
+    }
   }
 
   // Method to apply the accessibility settings to the root element (HTML)
@@ -191,8 +199,7 @@ export class WeissAccessibilityCenterService {
   }
 
   getBrowserLanguage(): string {
-
-    if(window && (window?.navigator?.language || window?.navigator?.languages?.[0])){
+    if (this.isBrowser) {
       const language = navigator.language || navigator.languages[0];
       return this.normalizeLanguageCode(language);
     }

@@ -8,7 +8,7 @@ import {
   ElementRef,
   QueryList,
   ViewChild,
-  HostListener,
+  SimpleChanges,
 } from "@angular/core";
 import {
   PanelData,
@@ -27,25 +27,12 @@ export class PanelComponent {
   @Output() statusMessageChange = new EventEmitter<string>();
   @ViewChild("accessibilityPanel") panelContent!: ElementRef;
   @ViewChildren("accordionButton") accordionButtons!: QueryList<ElementRef>;
-  @ViewChildren("radioInput") radioInputs!: QueryList<ElementRef>;
 
-  @HostListener("keydown", ["$event"])
-  handleTabNavigation(event: KeyboardEvent) {
-    if (
-      event.key === "Tab" ||
-      event.key === "ArrowUp" ||
-      event.key === "ArrowDown"
-    ) {
-      // Wait for DOM update
-      setTimeout(() => {
-        const activeElement = document.activeElement;
-        if (
-          activeElement &&
-          this.panelContent.nativeElement.contains(activeElement)
-        ) {
-          this.scrollElementIntoView(activeElement);
-        }
-      }, 0);
+  multiSelectable: boolean = false;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data'] && this.data) {
+      this.multiSelectable = this.data.multiSelectableAccordions ?? false;
     }
   }
 
@@ -73,14 +60,6 @@ export class PanelComponent {
 
   public expand: { [key in ModuleTypes]?: boolean } = {};
 
-  public toggleExpand(item: ModuleTypes): void {
-    // Close all other modules
-    this.moduleKeys.forEach((module) => {
-      if (module !== item) this.expand[module] = false;
-    });
-    this.expand[item] = !this.expand[item];
-  }
-
   constructor(
     public weissAccessibilityCenterService: WeissAccessibilityCenterService
   ) {}
@@ -94,7 +73,7 @@ export class PanelComponent {
 
   ngOnInit() {
     if (this.data) {
-      console.log(this.data);
+      this.multiSelectable = this.data.multiSelectableAccordions?? false;
       this.moduleKeys = Object.keys(this.data.modules) as ModuleTypes[];
       this.expand = this.moduleKeys.reduce((acc, module) => {
         acc[module] = false;
@@ -103,20 +82,4 @@ export class PanelComponent {
     }
   }
 
-  ngAfterViewInit() {
-    // Set up observers for radio inputs
-    this.radioInputs.changes.subscribe(() => {
-      this.setupRadioInputs();
-    });
-    this.setupRadioInputs();
-  }
-
-  private setupRadioInputs() {
-    this.radioInputs.forEach(radioRef => {
-      const element = radioRef.nativeElement;
-      element.addEventListener('focus', () => {
-        this.scrollElementIntoView(element);
-      });
-    });
-  }
 }

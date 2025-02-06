@@ -19,8 +19,8 @@
         <p>{{data?.description}}</p>
     </div>
     <div #accessibilityPanel class="display-flex flex-1 overflow-auto flex-column weiss-accessibility-center-panel__content">
-        <ul class="display-flex flex-column usa-list usa-list--unstyled">
-            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.fontSize" >
+        <div class="display-flex flex-column gap-1 usa-accordion usa-accordion--bordered" [ngClass]="{'usa-accordion--multiselectable': multiSelectable}" role="list" [attr.data-allow-multiple]="multiSelectable ? '' : null">
+            <span *ngIf="data?.modules?.fontSize" role="listitem">
                 <h3 class="usa-accordion__heading">
                     <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" 
                     aria-controls="accessibilityText" [attr.aria-expanded]="expand['fontSize']">
@@ -58,8 +58,8 @@
                         </fieldset>
                     </form>
                 </div>
-            </li>
-            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.spacing" >
+            </span>
+            <span *ngIf="data?.modules?.spacing" role="listitem">
                 <h3 class="usa-accordion__heading">
                     <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" 
                     aria-controls="accessibilitySpacing" [attr.aria-expanded]="expand['spacing']">
@@ -87,8 +87,8 @@
                         </fieldset>
                     </form>
                 </div>
-            </li>
-            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.theme">
+            </span>
+            <span *ngIf="data?.modules?.theme" role="listitem">
                 <h3 class="usa-accordion__heading">
                     <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" aria-controls="accessibilityTheme" [attr.aria-expanded]="expand['theme']">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -116,8 +116,8 @@
                         </fieldset>
                     </form>
                 </div>
-            </li>
-            <li class="usa-accordion expandable-list-item usa-accordion--bordered" *ngIf="data?.modules?.layout">
+            </span>
+            <span *ngIf="data?.modules?.layout" role="listitem">
                 <h3 class="usa-accordion__heading">
                     <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" 
                         aria-controls="accessibilityLayout" [attr.aria-expanded]="expand['layout']">
@@ -144,8 +144,8 @@
                         </fieldset>
                     </form>
                 </div>
-            </li>
-        </ul>
+            </span>
+        </div>
     </div>
     <div class="display-flex margin-top-2 gap-2 padding-x-2 padding-bottom-2">
         <button type="button" class="usa-button usa-button--unstyled"

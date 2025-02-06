@@ -16,6 +16,7 @@ export declare class WeissAccessibilityCenterComponent {
     theme: ModuleOptions | undefined;
     spacing: ModuleOptions | undefined;
     layout: ModuleOptions | undefined;
+    multiSelectableAccordions: boolean | undefined;
     currentOptions: AccessibilityOptions;
     showWeissAccessibilityCenter: boolean;
     data: PanelData | undefined;
@@ -26,10 +27,11 @@ export declare class WeissAccessibilityCenterComponent {
     forceCloseSelectionPanel: boolean;
     constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService);
     onStatusMessageChange(newMessage: string): void;
+    private scrollElementIntoView;
     handleKeyboardEvent(event: KeyboardEvent): void;
     ngOnChanges(changes: SimpleChanges): void;
     setupOptions(): void;
     buildData(): PanelData;
     static ɵfac: i0.ɵɵFactoryDeclaration<WeissAccessibilityCenterComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<WeissAccessibilityCenterComponent, "weiss-accessibility-center", never, { "options": { "alias": "options"; "required": false; }; "title": { "alias": "title"; "required": false; }; "description": { "alias": "description"; "required": false; }; "displayType": { "alias": "displayType"; "required": false; }; "overlay": { "alias": "overlay"; "required": false; }; "position": { "alias": "position"; "required": false; }; "modules": { "alias": "modules"; "required": false; }; "fontSize": { "alias": "fontSize"; "required": false; }; "theme": { "alias": "theme"; "required": false; }; "spacing": { "alias": "spacing"; "required": false; }; "layout": { "alias": "layout"; "required": false; }; }, {}, never, never, false, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<WeissAccessibilityCenterComponent, "weiss-accessibility-center", never, { "options": { "alias": "options"; "required": false; }; "title": { "alias": "title"; "required": false; }; "description": { "alias": "description"; "required": false; }; "displayType": { "alias": "displayType"; "required": false; }; "overlay": { "alias": "overlay"; "required": false; }; "position": { "alias": "position"; "required": false; }; "modules": { "alias": "modules"; "required": false; }; "fontSize": { "alias": "fontSize"; "required": false; }; "theme": { "alias": "theme"; "required": false; }; "spacing": { "alias": "spacing"; "required": false; }; "layout": { "alias": "layout"; "required": false; }; "multiSelectableAccordions": { "alias": "multiSelectableAccordions"; "required": false; }; }, {}, never, never, false, never>;
 }

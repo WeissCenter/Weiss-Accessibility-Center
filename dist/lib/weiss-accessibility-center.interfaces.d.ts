@@ -15,6 +15,7 @@ export type AccessibilityOptions = {
     include?: ModuleTypes[];
     title?: string;
     description?: string;
+    multiSelectableAccordions?: boolean;
     fontSize?: ModuleOptions;
     theme?: ModuleOptions;
     layout?: ModuleOptions;
@@ -34,6 +35,7 @@ export interface PanelData {
     title: string;
     description: string;
     position: PositionOptions;
+    multiSelectableAccordions?: boolean;
     modules: {
         [key in ModuleTypes]?: ModuleOptions;
     };
