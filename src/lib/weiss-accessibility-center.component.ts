@@ -142,12 +142,12 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
 
   ngAfterViewInit(): void {
     // Apply id to the actual <article> after it's in the DOM
-    this.weissAccessibilityCenterService.targetId$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((id) => {
-        const value = id ?? 'weiss-accessibility-center';
-        this.renderer.setAttribute(this.centerEl.nativeElement, 'id', value);
-      });
+    // this.weissAccessibilityCenterService.targetId$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((id) => {
+    //     const value = id ?? 'weiss-accessibility-center';
+    //     this.renderer.setAttribute(this.centerEl.nativeElement, 'id', value);
+    //   });
   }
 
   // This method is triggered when the child component emits a new status message
