@@ -5,33 +5,51 @@ import {
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 import {
   AccessibilityOptions,
   DisplayType,
   ModuleOptions,
   ModuleTypes,
   PanelData,
-  PositionOptions
-} from './weiss-accessibility-center.interfaces';
-import { WeissAccessibilityCenterService } from './weiss-accessibility-center.service';
-import { createAccessibilityOptions } from './weiss-accessibility-center.factory';
+  PositionOptions,
+} from "./weiss-accessibility-center.interfaces";
+import { WeissAccessibilityCenterService } from "./weiss-accessibility-center.service";
+import { createAccessibilityOptions } from "./weiss-accessibility-center.factory";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
-  selector: 'weiss-accessibility-center',
+  selector: "weiss-accessibility-center",
   template: `
     <article
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
+      [id]="targetId"
       #center
     >
-    <div class="background-overlay" *ngIf="currentOptions.overlay" (click)="weissAccessibilityCenterService.toggleWeissAccessibilityCenter(null, true)"></div>
+      <div
+        class="background-overlay"
+        *ngIf="currentOptions.overlay"
+        (click)="
+          weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
+            null,
+            true
+          )
+        "
+      ></div>
       <ng-container *ngIf="currentOptions.displayType === 'panel'">
-        <weiss-accessibility-panel (statusMessageChange)="onStatusMessageChange($event)" [data]="data"></weiss-accessibility-panel>
+        <weiss-accessibility-panel
+          (statusMessageChange)="onStatusMessageChange($event)"
+          [data]="data"
+        ></weiss-accessibility-panel>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'strip'">
-        <weiss-accessibility-strip [closeSelectionPanel]="forceCloseSelectionPanel" (statusMessageChange)="onStatusMessageChange($event)" [data]="data"></weiss-accessibility-strip>
+        <weiss-accessibility-strip
+          [closeSelectionPanel]="forceCloseSelectionPanel"
+          (statusMessageChange)="onStatusMessageChange($event)"
+          [data]="data"
+        ></weiss-accessibility-strip>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'popover'">
         <!-- <weiss-accessibility-popover></weiss-accessibility-popover> -->
@@ -49,7 +67,7 @@ import { createAccessibilityOptions } from './weiss-accessibility-center.factory
   encapsulation: ViewEncapsulation.None,
 })
 export class WeissAccessibilityCenterComponent {
-  @ViewChild('center') centerEl: any;
+  @ViewChild("center") centerEl: any;
 
   @Input() options: AccessibilityOptions | undefined;
   @Input() title: string | undefined;
@@ -69,14 +87,18 @@ export class WeissAccessibilityCenterComponent {
 
   public showWeissAccessibilityCenter = false;
   public data: PanelData | undefined;
+  public targetId: string | null = null;
 
   private firstFocusableElement: HTMLElement | null = null;
   private lastFocusableElement: HTMLElement | null = null;
   private focusableElementsString =
     'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], li[tabindex="0"], li[tabindex="-1"], tr[tabindex="0"], tr[tabindex="-1"]';
 
-  public statusMessage: string = '';
+  public statusMessage: string = "";
   public forceCloseSelectionPanel: boolean = false;
+
+  private focusTimeoutId: number | null = null;
+  private destroy$ = new Subject<void>();
 
   constructor(
     public weissAccessibilityCenterService: WeissAccessibilityCenterService
@@ -85,10 +107,18 @@ export class WeissAccessibilityCenterComponent {
       this.weissAccessibilityCenterService
     );
     this.setupOptions();
-    this.weissAccessibilityCenterService.showWeissAccessibilityCenter$.subscribe(
-      (show) => {
+    this.weissAccessibilityCenterService.showWeissAccessibilityCenter$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((show) => {
         this.showWeissAccessibilityCenter = show;
         this.forceCloseSelectionPanel = !show;
+
+        // Clear any pending focus timeout when closing
+        if (!show && this.focusTimeoutId !== null) {
+          clearTimeout(this.focusTimeoutId);
+          this.focusTimeoutId = null;
+        }
+
         if (show) {
           const focusableElements =
             this.centerEl?.nativeElement.querySelectorAll(
@@ -97,15 +127,20 @@ export class WeissAccessibilityCenterComponent {
           this.firstFocusableElement = focusableElements[0];
           this.lastFocusableElement =
             focusableElements[focusableElements.length - 1];
-          // Focus the first focusable element, but wait for the next tick so the element is rendered
-          setTimeout(() => {
+
+          // Focus the first focusable element on next tick, track timeout for cleanup
+          this.focusTimeoutId = window.setTimeout(() => {
             this.firstFocusableElement?.focus();
+            this.focusTimeoutId = null;
           }, 0);
         }
-      }
-    );
+      });
+    this.weissAccessibilityCenterService.targetId$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((id) => {
+        this.targetId = id;
+      });
   }
-
 
   // This method is triggered when the child component emits a new status message
   onStatusMessageChange(newMessage: string) {
@@ -121,11 +156,11 @@ export class WeissAccessibilityCenterComponent {
 
   // Close panel when user hits escape key
   // Trap focus within the accessibility center
-  @HostListener('keydown', ['$event'])
+  @HostListener("keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (this.showWeissAccessibilityCenter) {
       const deepActiveElement = document.activeElement;
-      if (event.key === 'Tab') {
+      if (event.key === "Tab") {
         if (event.shiftKey) {
           /* shift + tab */
           if (deepActiveElement === this.firstFocusableElement) {
@@ -140,14 +175,13 @@ export class WeissAccessibilityCenterComponent {
           }
         }
         this.scrollElementIntoView(deepActiveElement);
-      } else if (event.key === 'Escape') {
+      } else if (event.key === "Escape") {
         this.weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
           null,
           true
         );
         this.statusMessage = "Accessibility center closed";
-      } else if (event.key === "ArrowUp" ||
-        event.key === "ArrowDown") {
+      } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         // Wait for DOM update
         setTimeout(() => {
           const activeElement = document.activeElement;
@@ -157,7 +191,6 @@ export class WeissAccessibilityCenterComponent {
           ) {
             this.scrollElementIntoView(activeElement);
           }
-
         }, 0);
       }
     }
@@ -165,66 +198,66 @@ export class WeissAccessibilityCenterComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      changes['options'] &&
-      changes['options'].currentValue !== changes['options'].previousValue
+      changes["options"] &&
+      changes["options"].currentValue !== changes["options"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['title'] &&
-      changes['title'].currentValue !== changes['title'].previousValue
+      changes["title"] &&
+      changes["title"].currentValue !== changes["title"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['description'] &&
-      changes['description'].currentValue !==
-        changes['description'].previousValue
+      changes["description"] &&
+      changes["description"].currentValue !==
+        changes["description"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['displayType'] &&
-      changes['displayType'].currentValue !==
-        changes['displayType'].previousValue
+      changes["displayType"] &&
+      changes["displayType"].currentValue !==
+        changes["displayType"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['modules'] &&
-      changes['modules'].currentValue !== changes['modules'].previousValue
+      changes["modules"] &&
+      changes["modules"].currentValue !== changes["modules"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['fontSize'] &&
-      changes['fontSize'].currentValue !== changes['fontSize'].previousValue
+      changes["fontSize"] &&
+      changes["fontSize"].currentValue !== changes["fontSize"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['theme'] &&
-      changes['theme'].currentValue !== changes['theme'].previousValue
+      changes["theme"] &&
+      changes["theme"].currentValue !== changes["theme"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['spacing'] &&
-      changes['spacing'].currentValue !== changes['spacing'].previousValue
+      changes["spacing"] &&
+      changes["spacing"].currentValue !== changes["spacing"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['layout'] &&
-      changes['layout'].currentValue !== changes['layout'].previousValue
+      changes["layout"] &&
+      changes["layout"].currentValue !== changes["layout"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['overlay'] &&
-      changes['overlay'].currentValue !== changes['overlay'].previousValue
+      changes["overlay"] &&
+      changes["overlay"].currentValue !== changes["overlay"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['position'] &&
-      changes['position'].currentValue !== changes['position'].previousValue
+      changes["position"] &&
+      changes["position"].currentValue !== changes["position"].previousValue
     ) {
       this.setupOptions();
     } else if (
-      changes['multiSelectableAccordions'] &&
-      changes['multiSelectableAccordions'].currentValue !==
-        changes['multiSelectableAccordions'].previousValue
+      changes["multiSelectableAccordions"] &&
+      changes["multiSelectableAccordions"].currentValue !==
+        changes["multiSelectableAccordions"].previousValue
     ) {
       this.setupOptions();
     }
@@ -264,58 +297,64 @@ export class WeissAccessibilityCenterComponent {
       // If fontSize was passed in specifically, check to be sure it's included in the modules list. If not, add it.
       if (
         mergedOptions.include &&
-        !mergedOptions.include.includes('fontSize')
+        !mergedOptions.include.includes("fontSize")
       ) {
-        mergedOptions.include.push('fontSize');
+        mergedOptions.include.push("fontSize");
       }
     }
     if (this.theme) {
       mergedOptions.theme = this.theme;
-      if (mergedOptions.include && !mergedOptions.include.includes('theme')) {
-        mergedOptions.include.push('theme');
+      if (mergedOptions.include && !mergedOptions.include.includes("theme")) {
+        mergedOptions.include.push("theme");
       }
     }
     if (this.spacing) {
       mergedOptions.spacing = this.spacing;
-      if (
-        mergedOptions.include &&
-        !mergedOptions.include.includes('spacing')
-      ) {
-        mergedOptions.include.push('spacing');
+      if (mergedOptions.include && !mergedOptions.include.includes("spacing")) {
+        mergedOptions.include.push("spacing");
       }
     }
     if (this.layout) {
       mergedOptions.layout = this.layout;
-      if (
-        mergedOptions.include &&
-        !mergedOptions.include.includes('layout')
-      ) {
-        mergedOptions.include.push('layout');
+      if (mergedOptions.include && !mergedOptions.include.includes("layout")) {
+        mergedOptions.include.push("layout");
       }
     }
 
     // Now store the final merged options
     this.currentOptions = mergedOptions;
     this.data = this.buildData();
-
   }
 
   buildData() {
     // Build the data object to pass to the panel
     // Determine which modules to include based on the current options
     const includedModules = this.currentOptions.include || [];
-    let moduleData: PanelData['modules'] = {};
+    let moduleData: PanelData["modules"] = {};
     includedModules.forEach((module: ModuleTypes) => {
       // Add the module to the data object
       moduleData[module] = this.currentOptions[module];
     });
     const data: PanelData = {
-      title: this.currentOptions.title || 'Accessibility settings',
-      description: this.currentOptions.description || 'Adjust the settings below to customize the appearance of this website.',
+      title: this.currentOptions.title || "Accessibility settings",
+      description:
+        this.currentOptions.description ||
+        "Adjust the settings below to customize the appearance of this website.",
       modules: moduleData,
-      multiSelectableAccordions: this.currentOptions.multiSelectableAccordions || false,
-      position: this.currentOptions.position || 'end',
+      multiSelectableAccordions:
+        this.currentOptions.multiSelectableAccordions || false,
+      position: this.currentOptions.position || "end",
     };
     return data;
+  }
+
+  ngOnDestroy(): void {
+        // Clear any pending timeouts
+    if (this.focusTimeoutId !== null) {
+      clearTimeout(this.focusTimeoutId);
+      this.focusTimeoutId = null;
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

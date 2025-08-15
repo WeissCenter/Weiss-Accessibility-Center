@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { WeissAccessibilitySettings, ModuleDataOptions } from './weiss-accessibility-center.interfaces';
+import { Observable } from "rxjs";
+import { WeissAccessibilitySettings, ModuleDataOptions } from "./weiss-accessibility-center.interfaces";
 import * as i0 from "@angular/core";
 export declare class WeissAccessibilityCenterService {
     private document;
@@ -11,6 +11,10 @@ export declare class WeissAccessibilityCenterService {
     weissAccessibilityLayouts: ModuleDataOptions[];
     weissAccessibilityLanguages: ModuleDataOptions[];
     defaultWeissAccessibilitySettings: WeissAccessibilitySettings;
+    private defaultId;
+    private targetIdSubject;
+    readonly targetId$: Observable<string>;
+    setTargetId(id: string | null): void;
     private accessibilitySettingsSubject;
     weissAccessibilitySettings$: Observable<WeissAccessibilitySettings>;
     private target;

@@ -1,6 +1,6 @@
-import { SimpleChanges } from '@angular/core';
-import { AccessibilityOptions, DisplayType, ModuleOptions, ModuleTypes, PanelData, PositionOptions } from './weiss-accessibility-center.interfaces';
-import { WeissAccessibilityCenterService } from './weiss-accessibility-center.service';
+import { SimpleChanges } from "@angular/core";
+import { AccessibilityOptions, DisplayType, ModuleOptions, ModuleTypes, PanelData, PositionOptions } from "./weiss-accessibility-center.interfaces";
+import { WeissAccessibilityCenterService } from "./weiss-accessibility-center.service";
 import * as i0 from "@angular/core";
 export declare class WeissAccessibilityCenterComponent {
     weissAccessibilityCenterService: WeissAccessibilityCenterService;
@@ -20,11 +20,14 @@ export declare class WeissAccessibilityCenterComponent {
     currentOptions: AccessibilityOptions;
     showWeissAccessibilityCenter: boolean;
     data: PanelData | undefined;
+    targetId: string | null;
     private firstFocusableElement;
     private lastFocusableElement;
     private focusableElementsString;
     statusMessage: string;
     forceCloseSelectionPanel: boolean;
+    private focusTimeoutId;
+    private destroy$;
     constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService);
     onStatusMessageChange(newMessage: string): void;
     private scrollElementIntoView;
@@ -32,6 +35,7 @@ export declare class WeissAccessibilityCenterComponent {
     ngOnChanges(changes: SimpleChanges): void;
     setupOptions(): void;
     buildData(): PanelData;
+    ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<WeissAccessibilityCenterComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<WeissAccessibilityCenterComponent, "weiss-accessibility-center", never, { "options": { "alias": "options"; "required": false; }; "title": { "alias": "title"; "required": false; }; "description": { "alias": "description"; "required": false; }; "displayType": { "alias": "displayType"; "required": false; }; "overlay": { "alias": "overlay"; "required": false; }; "position": { "alias": "position"; "required": false; }; "modules": { "alias": "modules"; "required": false; }; "fontSize": { "alias": "fontSize"; "required": false; }; "theme": { "alias": "theme"; "required": false; }; "spacing": { "alias": "spacing"; "required": false; }; "layout": { "alias": "layout"; "required": false; }; "multiSelectableAccordions": { "alias": "multiSelectableAccordions"; "required": false; }; }, {}, never, never, false, never>;
 }

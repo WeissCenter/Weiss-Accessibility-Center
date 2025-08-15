@@ -1,58 +1,69 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { WeissAccessibilitySettings, ModuleDataOptions } from './weiss-accessibility-center.interfaces';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import {
+  WeissAccessibilitySettings,
+  ModuleDataOptions,
+} from "./weiss-accessibility-center.interfaces";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class WeissAccessibilityCenterService {
   // Browser check for SSR/clientside compatibility
   private isBrowser: boolean;
-  
+
   public weissAccessibilityThemes: ModuleDataOptions[] = [
-    { name: 'Default light', value: 'default' },
-    { name: 'Default dark', value: 'dynamic-dark' },
-    { name: 'High contrast', value: 'high-contrast' },
-    { name: 'Monochrome', value: 'monochrome' },
+    { name: "Default light", value: "default" },
+    { name: "Default dark", value: "dynamic-dark" },
+    { name: "High contrast", value: "high-contrast" },
+    { name: "Monochrome", value: "monochrome" },
   ];
 
   public weissAccessibilityFontSizes: ModuleDataOptions[] = [
-    { name: 'Decrease to 85%', value: 'smaller' },
-    { name: 'Default at 100%', value: 'default' },
-    { name: 'Increase to 125%', value: 'large' },
-    { name: 'Increase to 150%', value: 'larger' },
-    { name: 'Increase to 200%', value: 'largest' },
+    { name: "Decrease to 85%", value: "smaller" },
+    { name: "Default at 100%", value: "default" },
+    { name: "Increase to 125%", value: "large" },
+    { name: "Increase to 150%", value: "larger" },
+    { name: "Increase to 200%", value: "largest" },
   ];
 
   public weissAccessibilitySpacing: ModuleDataOptions[] = [
-    { name: 'Compact spacing', value: 'compact' },
-    { name: 'Cozy spacing', value: 'default' },
-    { name: 'Comfort spacing', value: 'comfort' },
-    { name: 'Extra-comfort spacing', value: 'extra-comfort' },
+    { name: "Compact spacing", value: "compact" },
+    { name: "Cozy spacing", value: "default" },
+    { name: "Comfort spacing", value: "comfort" },
+    { name: "Extra-comfort spacing", value: "extra-comfort" },
   ];
 
   public weissAccessibilityLayouts: ModuleDataOptions[] = [
-    { name: 'Default layout', value: 'default' },
-    { name: 'Single column', value: 'mobile' },
+    { name: "Default layout", value: "default" },
+    { name: "Single column", value: "mobile" },
   ];
 
   public weissAccessibilityLanguages: ModuleDataOptions[] = [
-    { name: 'العربية', value: 'ar' },
-    { name: '中文', value: 'zh-CN' },
-    { name: 'English', value: 'en' },
-    { name: 'Español', value: 'es' },
-    { name: 'Français', value: 'fr' },
-    { name: 'Русский', value: 'ru' },
+    { name: "العربية", value: "ar" },
+    { name: "中文", value: "zh-CN" },
+    { name: "English", value: "en" },
+    { name: "Español", value: "es" },
+    { name: "Français", value: "fr" },
+    { name: "Русский", value: "ru" },
   ];
 
   public defaultWeissAccessibilitySettings: WeissAccessibilitySettings = {
-    fontSize: 'default',
-    theme: 'default',
-    spacing: 'default',
-    language: 'en',
-    layout: 'default',
+    fontSize: "default",
+    theme: "default",
+    spacing: "default",
+    language: "en",
+    layout: "default",
   };
+
+  private defaultId: string = 'weiss-accessibility-center';
+  private targetIdSubject = new BehaviorSubject<string>(this.defaultId);
+  readonly targetId$ = this.targetIdSubject.asObservable();
+
+  setTargetId(id: string | null) {
+    this.targetIdSubject.next(id || this.defaultId);
+  }
 
   // BehaviorSubject to hold and broadcast the current accessibility settings
   private accessibilitySettingsSubject: BehaviorSubject<WeissAccessibilitySettings>;
@@ -62,7 +73,8 @@ export class WeissAccessibilityCenterService {
 
   private target: HTMLElement | null = null;
   private showWeissAccessibilityCenter = new BehaviorSubject<boolean>(false);
-  showWeissAccessibilityCenter$ = this.showWeissAccessibilityCenter.asObservable();
+  showWeissAccessibilityCenter$ =
+    this.showWeissAccessibilityCenter.asObservable();
 
   toggleWeissAccessibilityCenter(
     targetElement?: HTMLElement | null,
@@ -77,10 +89,10 @@ export class WeissAccessibilityCenterService {
     // Store the target element for focus restoration
     if (targetElement) {
       this.target =
-        targetElement.closest('button, [tabindex]') || targetElement;
+        targetElement.closest("button, [tabindex]") || targetElement;
     }
     if (!this.target) {
-      this.target = this.document.getElementById('weiss-a11y-toggle');
+      this.target = this.document.getElementById("weiss-a11y-toggle");
     }
     // If widget has been closed, return focus to the the target
     if (!this.showWeissAccessibilityCenter.value) {
@@ -94,7 +106,7 @@ export class WeissAccessibilityCenterService {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: Object
-    ) {
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     // On service initialization, load saved settings or use default ones
     const savedSettings = this.getSavedSettings();
@@ -122,7 +134,7 @@ export class WeissAccessibilityCenterService {
 
     if (this.isBrowser) {
       localStorage.setItem(
-        'weiss-accessibility-settings',
+        "weiss-accessibility-settings",
         JSON.stringify(updatedSettings)
       );
     }
@@ -137,7 +149,8 @@ export class WeissAccessibilityCenterService {
 
   // Method to get saved settings from localStorage or return default settings
   private getSavedSettings(): WeissAccessibilitySettings {
-    this.defaultWeissAccessibilitySettings.language = this.getSupportedLanguage();
+    this.defaultWeissAccessibilitySettings.language =
+      this.getSupportedLanguage();
 
     if (!this.isBrowser) {
       return this.defaultWeissAccessibilitySettings;
@@ -145,7 +158,7 @@ export class WeissAccessibilityCenterService {
 
     try {
       const savedSettings = JSON.parse(
-        localStorage.getItem('weiss-accessibility-settings') || 'null'
+        localStorage.getItem("weiss-accessibility-settings") || "null"
       );
       return savedSettings
         ? { ...this.defaultWeissAccessibilitySettings, ...savedSettings }
@@ -160,25 +173,23 @@ export class WeissAccessibilityCenterService {
     const root = this.document.documentElement; // Get the root HTML element
 
     // Apply font size, theme, spacing, and language settings as attributes
-    root.setAttribute('data-weiss-accessibility-font-size', settings.fontSize);
-    root.setAttribute('data-weiss-accessibility-theme', settings.theme);
-    root.setAttribute('data-weiss-accessibility-spacing', settings.spacing);
-    root.setAttribute('data-weiss-accessibility-language', settings.language);
-    root.setAttribute('data-weiss-accessibility-layout', settings.layout);
-    root.setAttribute('lang', settings.language);
+    root.setAttribute("data-weiss-accessibility-font-size", settings.fontSize);
+    root.setAttribute("data-weiss-accessibility-theme", settings.theme);
+    root.setAttribute("data-weiss-accessibility-spacing", settings.spacing);
+    root.setAttribute("data-weiss-accessibility-language", settings.language);
+    root.setAttribute("data-weiss-accessibility-layout", settings.layout);
+    root.setAttribute("lang", settings.language);
 
     // If the language is Arabic ('ar'), set the direction to RTL (Right-to-Left)
-    if (settings.language === 'ar') {
-      root.setAttribute('dir', 'rtl');
+    if (settings.language === "ar") {
+      root.setAttribute("dir", "rtl");
     } else {
-      root.setAttribute('dir', ''); // Otherwise, reset direction to LTR (Left-to-Right)
+      root.setAttribute("dir", ""); // Otherwise, reset direction to LTR (Left-to-Right)
     }
   }
 
   // Method to reset settings to default values, or optionally only specified settings
-  resetSettings(
-    onlyThese: Array<keyof WeissAccessibilitySettings> = []
-  ): void {
+  resetSettings(onlyThese: Array<keyof WeissAccessibilitySettings> = []): void {
     console.log("Resetting: " + onlyThese);
     // If no specific settings were provided, reset all settings to default
     if (onlyThese.length === 0) {
@@ -189,13 +200,13 @@ export class WeissAccessibilityCenterService {
 
       // Loop through the specified settings and set them to their default values
       onlyThese.forEach((setting) => {
-        resetSettings[setting] = this.defaultWeissAccessibilitySettings[setting];
+        resetSettings[setting] =
+          this.defaultWeissAccessibilitySettings[setting];
       });
 
       // Update the settings with the reset values
       this.updateSettings(resetSettings);
     }
-
   }
 
   getBrowserLanguage(): string {
@@ -204,12 +215,12 @@ export class WeissAccessibilityCenterService {
       return this.normalizeLanguageCode(language);
     }
 
-    return 'en';
+    return "en";
   }
 
   // Normalize the language code (e.g., "en-US" -> "en")
   normalizeLanguageCode(languageCode: string): string {
-    return languageCode.split('-')[0]; // Split by "-" and return the base code
+    return languageCode.split("-")[0]; // Split by "-" and return the base code
   }
 
   getSupportedLanguage(): string {
@@ -225,6 +236,6 @@ export class WeissAccessibilityCenterService {
     }
 
     // Fallback to a default language if no match is found
-    return 'en';
+    return "en";
   }
 }
