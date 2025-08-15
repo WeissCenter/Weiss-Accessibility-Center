@@ -1,7 +1,7 @@
-import { ElementRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
+import { ElementRef, Renderer2, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { WeissAccessibilityCenterService } from './weiss-accessibility-center.service';
 import * as i0 from "@angular/core";
-export declare class WeissAccessibilityToggleDirective implements OnInit, OnDestroy {
+export declare class WeissAccessibilityToggleDirective implements OnInit, OnDestroy, OnChanges {
     private el;
     private renderer;
     private accessibilityService;
@@ -10,6 +10,9 @@ export declare class WeissAccessibilityToggleDirective implements OnInit, OnDest
     private subscription;
     constructor(el: ElementRef, renderer: Renderer2, accessibilityService: WeissAccessibilityCenterService);
     ngOnInit(): void;
+    ngOnChanges(changes: SimpleChanges): void;
+    private pushTargetIdToService;
+    private updateAriaControls;
     private makeElementFocusable;
     onClick(target: HTMLElement): void;
     onKeyDown(event: KeyboardEvent): void;

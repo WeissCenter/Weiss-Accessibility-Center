@@ -5,6 +5,10 @@ import {
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
+  OnDestroy,
+  AfterViewInit,
+  Renderer2,
+  ElementRef
 } from "@angular/core";
 import {
   AccessibilityOptions,
@@ -25,7 +29,6 @@ import { Subject, takeUntil } from "rxjs";
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
-      [id]="targetId"
       #center
     >
       <div
@@ -66,8 +69,8 @@ import { Subject, takeUntil } from "rxjs";
   `,
   encapsulation: ViewEncapsulation.None,
 })
-export class WeissAccessibilityCenterComponent {
-  @ViewChild("center") centerEl: any;
+export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewInit {
+  @ViewChild("center", { read: ElementRef }) centerEl!: ElementRef<HTMLElement>;
 
   @Input() options: AccessibilityOptions | undefined;
   @Input() title: string | undefined;
@@ -87,7 +90,6 @@ export class WeissAccessibilityCenterComponent {
 
   public showWeissAccessibilityCenter = false;
   public data: PanelData | undefined;
-  public targetId: string | null = null;
 
   private firstFocusableElement: HTMLElement | null = null;
   private lastFocusableElement: HTMLElement | null = null;
@@ -101,19 +103,20 @@ export class WeissAccessibilityCenterComponent {
   private destroy$ = new Subject<void>();
 
   constructor(
-    public weissAccessibilityCenterService: WeissAccessibilityCenterService
+    public weissAccessibilityCenterService: WeissAccessibilityCenterService,
+    private renderer: Renderer2
   ) {
     this.currentOptions = createAccessibilityOptions(
       this.weissAccessibilityCenterService
     );
     this.setupOptions();
+
     this.weissAccessibilityCenterService.showWeissAccessibilityCenter$
       .pipe(takeUntil(this.destroy$))
       .subscribe((show) => {
         this.showWeissAccessibilityCenter = show;
         this.forceCloseSelectionPanel = !show;
 
-        // Clear any pending focus timeout when closing
         if (!show && this.focusTimeoutId !== null) {
           clearTimeout(this.focusTimeoutId);
           this.focusTimeoutId = null;
@@ -128,17 +131,22 @@ export class WeissAccessibilityCenterComponent {
           this.lastFocusableElement =
             focusableElements[focusableElements.length - 1];
 
-          // Focus the first focusable element on next tick, track timeout for cleanup
           this.focusTimeoutId = window.setTimeout(() => {
             this.firstFocusableElement?.focus();
             this.focusTimeoutId = null;
           }, 0);
         }
       });
+  }
+
+  ngAfterViewInit(): void {
+    // Apply id to the actual <article> after it's in the DOM
+    this.renderer.setAttribute(this.centerEl.nativeElement, 'id', 'weiss-accessibility-center');
     this.weissAccessibilityCenterService.targetId$
       .pipe(takeUntil(this.destroy$))
       .subscribe((id) => {
-        this.targetId = id;
+        const value = id ?? 'weiss-accessibility-center';
+        this.renderer.setAttribute(this.centerEl.nativeElement, 'id', value);
       });
   }
 
@@ -174,7 +182,7 @@ export class WeissAccessibilityCenterComponent {
             this.firstFocusableElement?.focus();
           }
         }
-        this.scrollElementIntoView(deepActiveElement);
+        this.scrollElementIntoView(deepActiveElement as Element);
       } else if (event.key === "Escape") {
         this.weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
           null,
@@ -349,7 +357,6 @@ export class WeissAccessibilityCenterComponent {
   }
 
   ngOnDestroy(): void {
-        // Clear any pending timeouts
     if (this.focusTimeoutId !== null) {
       clearTimeout(this.focusTimeoutId);
       this.focusTimeoutId = null;

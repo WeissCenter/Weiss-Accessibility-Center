@@ -7,13 +7,16 @@ import {
   HostListener,
   OnInit,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { WeissAccessibilityCenterService } from './weiss-accessibility-center.service';
 import { Subscription } from 'rxjs';
+
 @Directive({
   selector: '[weissA11yToggle]',
 })
-export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy {
+export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy, OnChanges {
   @Input('weissA11yToggle') targetId!: string;
 
   private ariaExpanded: boolean = false;
@@ -27,23 +30,17 @@ export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Set necessary ARIA attributes
-    this.renderer.setAttribute(
-      this.el.nativeElement,
-      'aria-controls',
-      this.targetId
-    );
     this.renderer.setAttribute(this.el.nativeElement, 'aria-expanded', 'false');
     this.renderer.setAttribute(this.el.nativeElement, 'aria-haspopup', 'true');
+
     // If no id on the button, set one
     if (!this.el.nativeElement.id) {
-      this.renderer.setAttribute(
-        this.el.nativeElement,
-        'id',
-        'weiss-a11y-toggle'
-      );
+      this.renderer.setAttribute(this.el.nativeElement, 'id', 'weiss-a11y-toggle');
     }
 
-    this.accessibilityService.setTargetId(this.targetId ?? null);
+    // Initial push and aria-controls sync
+    this.pushTargetIdToService();
+    this.updateAriaControls();
 
     // Ensure the element is focusable if it's not inherently focusable
     this.makeElementFocusable();
@@ -67,6 +64,25 @@ export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy {
       );
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['targetId']) {
+      this.pushTargetIdToService();
+      this.updateAriaControls();
+    }
+  }
+
+  private pushTargetIdToService() {
+    this.accessibilityService.setTargetId(this.targetId ?? null);
+  }
+
+  private updateAriaControls() {
+    if (this.targetId) {
+      this.renderer.setAttribute(this.el.nativeElement, 'aria-controls', this.targetId);
+    } else {
+      this.renderer.removeAttribute(this.el.nativeElement, 'aria-controls');
+    }
+  }
+
   // Ensure the element is focusable
   private makeElementFocusable() {
     const nodeName = this.el.nativeElement.nodeName.toLowerCase();
@@ -85,24 +101,24 @@ export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy {
 
   @HostListener('click', ['$event.target'])
   onClick(target: HTMLElement) {
-
-    // Toggle the widget visibility
     this.accessibilityService.toggleWeissAccessibilityCenter(target);
   }
+
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    // Check if Enter or Space was pressed
     if (
       event.key === 'Enter' ||
       event.key === ' ' ||
       event.key === 'Spacebar'
     ) {
-      event.preventDefault(); // Prevent default action (like scrolling for spacebar)
+      event.preventDefault();
       this.accessibilityService.toggleWeissAccessibilityCenter(this.el.nativeElement);
     }
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    // Optionally clear the id if this was the only trigger
+    // this.accessibilityService.setTargetId(null);
   }
 }
