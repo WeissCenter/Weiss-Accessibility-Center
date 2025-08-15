@@ -609,7 +609,7 @@ class WeissAccessibilityCenterComponent {
             moduleData[module] = this.currentOptions[module];
         });
         const data = {
-            title: this.currentOptions.title || "Accessibility settings",
+            title: this.currentOptions.title || "Accessibility settings 2",
             description: this.currentOptions.description ||
                 "Adjust the settings below to customize the appearance of this website.",
             modules: moduleData,

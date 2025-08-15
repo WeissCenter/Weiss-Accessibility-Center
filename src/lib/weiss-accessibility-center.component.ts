@@ -344,7 +344,7 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
       moduleData[module] = this.currentOptions[module];
     });
     const data: PanelData = {
-      title: this.currentOptions.title || "Accessibility settings",
+      title: this.currentOptions.title || "Accessibility settings 2",
       description:
         this.currentOptions.description ||
         "Adjust the settings below to customize the appearance of this website.",
