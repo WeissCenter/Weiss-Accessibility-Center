@@ -29,7 +29,6 @@ import { Subject, takeUntil } from "rxjs";
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
-      id="blargh"
       #center
     >
       <div
@@ -142,12 +141,13 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
 
   ngAfterViewInit(): void {
     // Apply id to the actual <article> after it's in the DOM
-    // this.weissAccessibilityCenterService.targetId$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((id) => {
-    //     const value = id ?? 'weiss-accessibility-center';
-    //     this.renderer.setAttribute(this.centerEl.nativeElement, 'id', value);
-    //   });
+    this.renderer.setAttribute(this.centerEl.nativeElement, 'id', 'weiss-accessibility-center');
+    this.weissAccessibilityCenterService.targetId$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((id) => {
+        const value = id ?? 'weiss-accessibility-center';
+        this.renderer.setAttribute(this.centerEl.nativeElement, 'id', value);
+      });
   }
 
   // This method is triggered when the child component emits a new status message
@@ -344,7 +344,7 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
       moduleData[module] = this.currentOptions[module];
     });
     const data: PanelData = {
-      title: this.currentOptions.title || "Accessibility settings 2",
+      title: this.currentOptions.title || "Accessibility settings",
       description:
         this.currentOptions.description ||
         "Adjust the settings below to customize the appearance of this website.",
