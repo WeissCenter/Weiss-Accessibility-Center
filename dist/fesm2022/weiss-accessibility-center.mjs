@@ -397,7 +397,6 @@ class WeissAccessibilityCenterComponent {
     currentOptions;
     showWeissAccessibilityCenter = false;
     data;
-    targetId = null;
     firstFocusableElement = null;
     lastFocusableElement = null;
     focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], li[tabindex="0"], li[tabindex="-1"], tr[tabindex="0"], tr[tabindex="-1"]';
@@ -431,11 +430,7 @@ class WeissAccessibilityCenterComponent {
                 }, 0);
             }
         });
-        this.weissAccessibilityCenterService.targetId$
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((id) => {
-            this.targetId = id;
-        });
+        // Removed targetId$ subscription and local state; template binds via async pipe.
     }
     // This method is triggered when the child component emits a new status message
     onStatusMessageChange(newMessage) {
@@ -630,7 +625,7 @@ class WeissAccessibilityCenterComponent {
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
-      [id]="targetId"
+      [attr.id]="(weissAccessibilityCenterService.targetId$ | async) ?? null"
       #center
     >
       <div
@@ -668,7 +663,7 @@ class WeissAccessibilityCenterComponent {
         {{ statusMessage }}
       </div>
     </article>
-  `, isInline: true, dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "component", type: StripComponent, selector: "weiss-accessibility-strip", inputs: ["data", "closeSelectionPanel"], outputs: ["statusMessageChange"] }, { kind: "component", type: PanelComponent, selector: "weiss-accessibility-panel", inputs: ["data"], outputs: ["statusMessageChange"] }], encapsulation: i0.ViewEncapsulation.None });
+  `, isInline: true, dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "component", type: StripComponent, selector: "weiss-accessibility-strip", inputs: ["data", "closeSelectionPanel"], outputs: ["statusMessageChange"] }, { kind: "component", type: PanelComponent, selector: "weiss-accessibility-panel", inputs: ["data"], outputs: ["statusMessageChange"] }, { kind: "pipe", type: i2.AsyncPipe, name: "async" }], encapsulation: i0.ViewEncapsulation.None });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterComponent, decorators: [{
             type: Component,
@@ -679,7 +674,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
-      [id]="targetId"
+      [attr.id]="(weissAccessibilityCenterService.targetId$ | async) ?? null"
       #center
     >
       <div
@@ -767,14 +762,15 @@ class WeissAccessibilityToggleDirective {
     }
     ngOnInit() {
         // Set necessary ARIA attributes
-        this.renderer.setAttribute(this.el.nativeElement, 'aria-controls', this.targetId);
         this.renderer.setAttribute(this.el.nativeElement, 'aria-expanded', 'false');
         this.renderer.setAttribute(this.el.nativeElement, 'aria-haspopup', 'true');
         // If no id on the button, set one
         if (!this.el.nativeElement.id) {
             this.renderer.setAttribute(this.el.nativeElement, 'id', 'weiss-a11y-toggle');
         }
-        this.accessibilityService.setTargetId(this.targetId ?? null);
+        // Initial push and aria-controls sync
+        this.pushTargetIdToService();
+        this.updateAriaControls();
         // Ensure the element is focusable if it's not inherently focusable
         this.makeElementFocusable();
         // Subscribe to the widget visibility observable to update 'aria-expanded'
@@ -789,6 +785,23 @@ class WeissAccessibilityToggleDirective {
                     this.renderer.removeClass(this.el.nativeElement, 'weiss-a11y-active');
                 }
             });
+    }
+    ngOnChanges(changes) {
+        if (changes['targetId']) {
+            this.pushTargetIdToService();
+            this.updateAriaControls();
+        }
+    }
+    pushTargetIdToService() {
+        this.accessibilityService.setTargetId(this.targetId ?? null);
+    }
+    updateAriaControls() {
+        if (this.targetId) {
+            this.renderer.setAttribute(this.el.nativeElement, 'aria-controls', this.targetId);
+        }
+        else {
+            this.renderer.removeAttribute(this.el.nativeElement, 'aria-controls');
+        }
     }
     // Ensure the element is focusable
     makeElementFocusable() {
@@ -805,23 +818,23 @@ class WeissAccessibilityToggleDirective {
         }
     }
     onClick(target) {
-        // Toggle the widget visibility
         this.accessibilityService.toggleWeissAccessibilityCenter(target);
     }
     onKeyDown(event) {
-        // Check if Enter or Space was pressed
         if (event.key === 'Enter' ||
             event.key === ' ' ||
             event.key === 'Spacebar') {
-            event.preventDefault(); // Prevent default action (like scrolling for spacebar)
+            event.preventDefault();
             this.accessibilityService.toggleWeissAccessibilityCenter(this.el.nativeElement);
         }
     }
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        // Optionally clear the id if this was the only trigger
+        // this.accessibilityService.setTargetId(null);
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityToggleDirective, deps: [{ token: i0.ElementRef }, { token: i0.Renderer2 }, { token: WeissAccessibilityCenterService }], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.2.8", type: WeissAccessibilityToggleDirective, selector: "[weissA11yToggle]", inputs: { targetId: ["weissA11yToggle", "targetId"] }, host: { listeners: { "click": "onClick($event.target)", "keydown": "onKeyDown($event)" } }, ngImport: i0 });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.2.8", type: WeissAccessibilityToggleDirective, selector: "[weissA11yToggle]", inputs: { targetId: ["weissA11yToggle", "targetId"] }, host: { listeners: { "click": "onClick($event.target)", "keydown": "onKeyDown($event)" } }, usesOnChanges: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityToggleDirective, decorators: [{
             type: Directive,

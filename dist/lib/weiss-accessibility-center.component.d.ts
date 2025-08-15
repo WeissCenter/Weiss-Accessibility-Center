@@ -1,8 +1,8 @@
-import { SimpleChanges } from "@angular/core";
+import { SimpleChanges, OnDestroy } from "@angular/core";
 import { AccessibilityOptions, DisplayType, ModuleOptions, ModuleTypes, PanelData, PositionOptions } from "./weiss-accessibility-center.interfaces";
 import { WeissAccessibilityCenterService } from "./weiss-accessibility-center.service";
 import * as i0 from "@angular/core";
-export declare class WeissAccessibilityCenterComponent {
+export declare class WeissAccessibilityCenterComponent implements OnDestroy {
     weissAccessibilityCenterService: WeissAccessibilityCenterService;
     centerEl: any;
     options: AccessibilityOptions | undefined;
@@ -20,7 +20,6 @@ export declare class WeissAccessibilityCenterComponent {
     currentOptions: AccessibilityOptions;
     showWeissAccessibilityCenter: boolean;
     data: PanelData | undefined;
-    targetId: string | null;
     private firstFocusableElement;
     private lastFocusableElement;
     private focusableElementsString;
