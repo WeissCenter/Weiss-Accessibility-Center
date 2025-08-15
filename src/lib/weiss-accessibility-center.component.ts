@@ -29,6 +29,7 @@ import { Subject, takeUntil } from "rxjs";
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
+      id="blargh"
       #center
     >
       <div

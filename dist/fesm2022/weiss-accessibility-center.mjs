@@ -632,6 +632,7 @@ class WeissAccessibilityCenterComponent {
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
+      id="blargh"
       #center
     >
       <div
@@ -680,6 +681,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
+      id="blargh"
       #center
     >
       <div
