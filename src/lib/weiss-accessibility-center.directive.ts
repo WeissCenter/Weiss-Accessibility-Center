@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   selector: '[weissA11yToggle]',
 })
 export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy {
-  @Input('weissA11yToggle') targetId: string = 'weissAccessibilityCenter';
+  @Input('weissA11yToggle') targetId!: string;
 
   private ariaExpanded: boolean = false;
   private subscription: Subscription = new Subscription();
@@ -42,6 +42,8 @@ export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy {
         'weiss-a11y-toggle'
       );
     }
+
+    this.accessibilityService.setTargetId(this.targetId ?? null);
 
     // Ensure the element is focusable if it's not inherently focusable
     this.makeElementFocusable();

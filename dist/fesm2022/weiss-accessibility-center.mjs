@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
 import { PLATFORM_ID, Injectable, Inject, EventEmitter, Component, ViewEncapsulation, Input, Output, ViewChild, ViewChildren, HostListener, Directive, NgModule } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil, Subscription } from 'rxjs';
 import * as i2 from '@angular/common';
 import { isPlatformBrowser, DOCUMENT, CommonModule, AsyncPipe } from '@angular/common';
 import * as i3 from '@angular/forms';
@@ -12,43 +12,49 @@ class WeissAccessibilityCenterService {
     // Browser check for SSR/clientside compatibility
     isBrowser;
     weissAccessibilityThemes = [
-        { name: 'Default light', value: 'default' },
-        { name: 'Default dark', value: 'dynamic-dark' },
-        { name: 'High contrast', value: 'high-contrast' },
-        { name: 'Monochrome', value: 'monochrome' },
+        { name: "Default light", value: "default" },
+        { name: "Default dark", value: "dynamic-dark" },
+        { name: "High contrast", value: "high-contrast" },
+        { name: "Monochrome", value: "monochrome" },
     ];
     weissAccessibilityFontSizes = [
-        { name: 'Decrease to 85%', value: 'smaller' },
-        { name: 'Default at 100%', value: 'default' },
-        { name: 'Increase to 125%', value: 'large' },
-        { name: 'Increase to 150%', value: 'larger' },
-        { name: 'Increase to 200%', value: 'largest' },
+        { name: "Decrease to 85%", value: "smaller" },
+        { name: "Default at 100%", value: "default" },
+        { name: "Increase to 125%", value: "large" },
+        { name: "Increase to 150%", value: "larger" },
+        { name: "Increase to 200%", value: "largest" },
     ];
     weissAccessibilitySpacing = [
-        { name: 'Compact spacing', value: 'compact' },
-        { name: 'Cozy spacing', value: 'default' },
-        { name: 'Comfort spacing', value: 'comfort' },
-        { name: 'Extra-comfort spacing', value: 'extra-comfort' },
+        { name: "Compact spacing", value: "compact" },
+        { name: "Cozy spacing", value: "default" },
+        { name: "Comfort spacing", value: "comfort" },
+        { name: "Extra-comfort spacing", value: "extra-comfort" },
     ];
     weissAccessibilityLayouts = [
-        { name: 'Default layout', value: 'default' },
-        { name: 'Single column', value: 'mobile' },
+        { name: "Default layout", value: "default" },
+        { name: "Single column", value: "mobile" },
     ];
     weissAccessibilityLanguages = [
-        { name: 'العربية', value: 'ar' },
-        { name: '中文', value: 'zh-CN' },
-        { name: 'English', value: 'en' },
-        { name: 'Español', value: 'es' },
-        { name: 'Français', value: 'fr' },
-        { name: 'Русский', value: 'ru' },
+        { name: "العربية", value: "ar" },
+        { name: "中文", value: "zh-CN" },
+        { name: "English", value: "en" },
+        { name: "Español", value: "es" },
+        { name: "Français", value: "fr" },
+        { name: "Русский", value: "ru" },
     ];
     defaultWeissAccessibilitySettings = {
-        fontSize: 'default',
-        theme: 'default',
-        spacing: 'default',
-        language: 'en',
-        layout: 'default',
+        fontSize: "default",
+        theme: "default",
+        spacing: "default",
+        language: "en",
+        layout: "default",
     };
+    defaultId = 'weiss-accessibility-center';
+    targetIdSubject = new BehaviorSubject(this.defaultId);
+    targetId$ = this.targetIdSubject.asObservable();
+    setTargetId(id) {
+        this.targetIdSubject.next(id || this.defaultId);
+    }
     // BehaviorSubject to hold and broadcast the current accessibility settings
     accessibilitySettingsSubject;
     // Observable to allow components to subscribe and react to settings changes
@@ -64,10 +70,10 @@ class WeissAccessibilityCenterService {
         // Store the target element for focus restoration
         if (targetElement) {
             this.target =
-                targetElement.closest('button, [tabindex]') || targetElement;
+                targetElement.closest("button, [tabindex]") || targetElement;
         }
         if (!this.target) {
-            this.target = this.document.getElementById('weiss-a11y-toggle');
+            this.target = this.document.getElementById("weiss-a11y-toggle");
         }
         // If widget has been closed, return focus to the the target
         if (!this.showWeissAccessibilityCenter.value) {
@@ -100,7 +106,7 @@ class WeissAccessibilityCenterService {
         };
         this.accessibilitySettingsSubject.next(updatedSettings);
         if (this.isBrowser) {
-            localStorage.setItem('weiss-accessibility-settings', JSON.stringify(updatedSettings));
+            localStorage.setItem("weiss-accessibility-settings", JSON.stringify(updatedSettings));
         }
         this.applySettings(updatedSettings);
     }
@@ -110,12 +116,13 @@ class WeissAccessibilityCenterService {
     }
     // Method to get saved settings from localStorage or return default settings
     getSavedSettings() {
-        this.defaultWeissAccessibilitySettings.language = this.getSupportedLanguage();
+        this.defaultWeissAccessibilitySettings.language =
+            this.getSupportedLanguage();
         if (!this.isBrowser) {
             return this.defaultWeissAccessibilitySettings;
         }
         try {
-            const savedSettings = JSON.parse(localStorage.getItem('weiss-accessibility-settings') || 'null');
+            const savedSettings = JSON.parse(localStorage.getItem("weiss-accessibility-settings") || "null");
             return savedSettings
                 ? { ...this.defaultWeissAccessibilitySettings, ...savedSettings }
                 : this.defaultWeissAccessibilitySettings;
@@ -128,18 +135,18 @@ class WeissAccessibilityCenterService {
     applySettings(settings) {
         const root = this.document.documentElement; // Get the root HTML element
         // Apply font size, theme, spacing, and language settings as attributes
-        root.setAttribute('data-weiss-accessibility-font-size', settings.fontSize);
-        root.setAttribute('data-weiss-accessibility-theme', settings.theme);
-        root.setAttribute('data-weiss-accessibility-spacing', settings.spacing);
-        root.setAttribute('data-weiss-accessibility-language', settings.language);
-        root.setAttribute('data-weiss-accessibility-layout', settings.layout);
-        root.setAttribute('lang', settings.language);
+        root.setAttribute("data-weiss-accessibility-font-size", settings.fontSize);
+        root.setAttribute("data-weiss-accessibility-theme", settings.theme);
+        root.setAttribute("data-weiss-accessibility-spacing", settings.spacing);
+        root.setAttribute("data-weiss-accessibility-language", settings.language);
+        root.setAttribute("data-weiss-accessibility-layout", settings.layout);
+        root.setAttribute("lang", settings.language);
         // If the language is Arabic ('ar'), set the direction to RTL (Right-to-Left)
-        if (settings.language === 'ar') {
-            root.setAttribute('dir', 'rtl');
+        if (settings.language === "ar") {
+            root.setAttribute("dir", "rtl");
         }
         else {
-            root.setAttribute('dir', ''); // Otherwise, reset direction to LTR (Left-to-Right)
+            root.setAttribute("dir", ""); // Otherwise, reset direction to LTR (Left-to-Right)
         }
     }
     // Method to reset settings to default values, or optionally only specified settings
@@ -154,7 +161,8 @@ class WeissAccessibilityCenterService {
             const resetSettings = {};
             // Loop through the specified settings and set them to their default values
             onlyThese.forEach((setting) => {
-                resetSettings[setting] = this.defaultWeissAccessibilitySettings[setting];
+                resetSettings[setting] =
+                    this.defaultWeissAccessibilitySettings[setting];
             });
             // Update the settings with the reset values
             this.updateSettings(resetSettings);
@@ -165,11 +173,11 @@ class WeissAccessibilityCenterService {
             const language = navigator.language || navigator.languages[0];
             return this.normalizeLanguageCode(language);
         }
-        return 'en';
+        return "en";
     }
     // Normalize the language code (e.g., "en-US" -> "en")
     normalizeLanguageCode(languageCode) {
-        return languageCode.split('-')[0]; // Split by "-" and return the base code
+        return languageCode.split("-")[0]; // Split by "-" and return the base code
     }
     getSupportedLanguage() {
         const browserLanguage = this.getBrowserLanguage();
@@ -179,15 +187,15 @@ class WeissAccessibilityCenterService {
             return foundLanguage.value;
         }
         // Fallback to a default language if no match is found
-        return 'en';
+        return "en";
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, deps: [{ token: DOCUMENT }, { token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, providedIn: 'root' });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, providedIn: "root" });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterService, decorators: [{
             type: Injectable,
             args: [{
-                    providedIn: 'root',
+                    providedIn: "root",
                 }]
         }], ctorParameters: () => [{ type: Document, decorators: [{
                     type: Inject,
@@ -389,28 +397,44 @@ class WeissAccessibilityCenterComponent {
     currentOptions;
     showWeissAccessibilityCenter = false;
     data;
+    targetId = null;
     firstFocusableElement = null;
     lastFocusableElement = null;
     focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], li[tabindex="0"], li[tabindex="-1"], tr[tabindex="0"], tr[tabindex="-1"]';
-    statusMessage = '';
+    statusMessage = "";
     forceCloseSelectionPanel = false;
+    focusTimeoutId = null;
+    destroy$ = new Subject();
     constructor(weissAccessibilityCenterService) {
         this.weissAccessibilityCenterService = weissAccessibilityCenterService;
         this.currentOptions = createAccessibilityOptions(this.weissAccessibilityCenterService);
         this.setupOptions();
-        this.weissAccessibilityCenterService.showWeissAccessibilityCenter$.subscribe((show) => {
+        this.weissAccessibilityCenterService.showWeissAccessibilityCenter$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((show) => {
             this.showWeissAccessibilityCenter = show;
             this.forceCloseSelectionPanel = !show;
+            // Clear any pending focus timeout when closing
+            if (!show && this.focusTimeoutId !== null) {
+                clearTimeout(this.focusTimeoutId);
+                this.focusTimeoutId = null;
+            }
             if (show) {
                 const focusableElements = this.centerEl?.nativeElement.querySelectorAll(this.focusableElementsString);
                 this.firstFocusableElement = focusableElements[0];
                 this.lastFocusableElement =
                     focusableElements[focusableElements.length - 1];
-                // Focus the first focusable element, but wait for the next tick so the element is rendered
-                setTimeout(() => {
+                // Focus the first focusable element on next tick, track timeout for cleanup
+                this.focusTimeoutId = window.setTimeout(() => {
                     this.firstFocusableElement?.focus();
+                    this.focusTimeoutId = null;
                 }, 0);
             }
+        });
+        this.weissAccessibilityCenterService.targetId$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((id) => {
+            this.targetId = id;
         });
     }
     // This method is triggered when the child component emits a new status message
@@ -428,7 +452,7 @@ class WeissAccessibilityCenterComponent {
     handleKeyboardEvent(event) {
         if (this.showWeissAccessibilityCenter) {
             const deepActiveElement = document.activeElement;
-            if (event.key === 'Tab') {
+            if (event.key === "Tab") {
                 if (event.shiftKey) {
                     /* shift + tab */
                     if (deepActiveElement === this.firstFocusableElement) {
@@ -445,12 +469,11 @@ class WeissAccessibilityCenterComponent {
                 }
                 this.scrollElementIntoView(deepActiveElement);
             }
-            else if (event.key === 'Escape') {
+            else if (event.key === "Escape") {
                 this.weissAccessibilityCenterService.toggleWeissAccessibilityCenter(null, true);
                 this.statusMessage = "Accessibility center closed";
             }
-            else if (event.key === "ArrowUp" ||
-                event.key === "ArrowDown") {
+            else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
                 // Wait for DOM update
                 setTimeout(() => {
                     const activeElement = document.activeElement;
@@ -463,55 +486,55 @@ class WeissAccessibilityCenterComponent {
         }
     }
     ngOnChanges(changes) {
-        if (changes['options'] &&
-            changes['options'].currentValue !== changes['options'].previousValue) {
+        if (changes["options"] &&
+            changes["options"].currentValue !== changes["options"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['title'] &&
-            changes['title'].currentValue !== changes['title'].previousValue) {
+        else if (changes["title"] &&
+            changes["title"].currentValue !== changes["title"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['description'] &&
-            changes['description'].currentValue !==
-                changes['description'].previousValue) {
+        else if (changes["description"] &&
+            changes["description"].currentValue !==
+                changes["description"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['displayType'] &&
-            changes['displayType'].currentValue !==
-                changes['displayType'].previousValue) {
+        else if (changes["displayType"] &&
+            changes["displayType"].currentValue !==
+                changes["displayType"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['modules'] &&
-            changes['modules'].currentValue !== changes['modules'].previousValue) {
+        else if (changes["modules"] &&
+            changes["modules"].currentValue !== changes["modules"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['fontSize'] &&
-            changes['fontSize'].currentValue !== changes['fontSize'].previousValue) {
+        else if (changes["fontSize"] &&
+            changes["fontSize"].currentValue !== changes["fontSize"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['theme'] &&
-            changes['theme'].currentValue !== changes['theme'].previousValue) {
+        else if (changes["theme"] &&
+            changes["theme"].currentValue !== changes["theme"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['spacing'] &&
-            changes['spacing'].currentValue !== changes['spacing'].previousValue) {
+        else if (changes["spacing"] &&
+            changes["spacing"].currentValue !== changes["spacing"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['layout'] &&
-            changes['layout'].currentValue !== changes['layout'].previousValue) {
+        else if (changes["layout"] &&
+            changes["layout"].currentValue !== changes["layout"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['overlay'] &&
-            changes['overlay'].currentValue !== changes['overlay'].previousValue) {
+        else if (changes["overlay"] &&
+            changes["overlay"].currentValue !== changes["overlay"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['position'] &&
-            changes['position'].currentValue !== changes['position'].previousValue) {
+        else if (changes["position"] &&
+            changes["position"].currentValue !== changes["position"].previousValue) {
             this.setupOptions();
         }
-        else if (changes['multiSelectableAccordions'] &&
-            changes['multiSelectableAccordions'].currentValue !==
-                changes['multiSelectableAccordions'].previousValue) {
+        else if (changes["multiSelectableAccordions"] &&
+            changes["multiSelectableAccordions"].currentValue !==
+                changes["multiSelectableAccordions"].previousValue) {
             this.setupOptions();
         }
     }
@@ -547,28 +570,26 @@ class WeissAccessibilityCenterComponent {
             mergedOptions.fontSize = this.fontSize;
             // If fontSize was passed in specifically, check to be sure it's included in the modules list. If not, add it.
             if (mergedOptions.include &&
-                !mergedOptions.include.includes('fontSize')) {
-                mergedOptions.include.push('fontSize');
+                !mergedOptions.include.includes("fontSize")) {
+                mergedOptions.include.push("fontSize");
             }
         }
         if (this.theme) {
             mergedOptions.theme = this.theme;
-            if (mergedOptions.include && !mergedOptions.include.includes('theme')) {
-                mergedOptions.include.push('theme');
+            if (mergedOptions.include && !mergedOptions.include.includes("theme")) {
+                mergedOptions.include.push("theme");
             }
         }
         if (this.spacing) {
             mergedOptions.spacing = this.spacing;
-            if (mergedOptions.include &&
-                !mergedOptions.include.includes('spacing')) {
-                mergedOptions.include.push('spacing');
+            if (mergedOptions.include && !mergedOptions.include.includes("spacing")) {
+                mergedOptions.include.push("spacing");
             }
         }
         if (this.layout) {
             mergedOptions.layout = this.layout;
-            if (mergedOptions.include &&
-                !mergedOptions.include.includes('layout')) {
-                mergedOptions.include.push('layout');
+            if (mergedOptions.include && !mergedOptions.include.includes("layout")) {
+                mergedOptions.include.push("layout");
             }
         }
         // Now store the final merged options
@@ -585,13 +606,23 @@ class WeissAccessibilityCenterComponent {
             moduleData[module] = this.currentOptions[module];
         });
         const data = {
-            title: this.currentOptions.title || 'Accessibility settings',
-            description: this.currentOptions.description || 'Adjust the settings below to customize the appearance of this website.',
+            title: this.currentOptions.title || "Accessibility settings",
+            description: this.currentOptions.description ||
+                "Adjust the settings below to customize the appearance of this website.",
             modules: moduleData,
             multiSelectableAccordions: this.currentOptions.multiSelectableAccordions || false,
-            position: this.currentOptions.position || 'end',
+            position: this.currentOptions.position || "end",
         };
         return data;
+    }
+    ngOnDestroy() {
+        // Clear any pending timeouts
+        if (this.focusTimeoutId !== null) {
+            clearTimeout(this.focusTimeoutId);
+            this.focusTimeoutId = null;
+        }
+        this.destroy$.next();
+        this.destroy$.complete();
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterComponent, deps: [{ token: WeissAccessibilityCenterService }], target: i0.ɵɵFactoryTarget.Component });
     static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.2.8", type: WeissAccessibilityCenterComponent, selector: "weiss-accessibility-center", inputs: { options: "options", title: "title", description: "description", displayType: "displayType", overlay: "overlay", position: "position", modules: "modules", fontSize: "fontSize", theme: "theme", spacing: "spacing", layout: "layout", multiSelectableAccordions: "multiSelectableAccordions" }, host: { listeners: { "keydown": "handleKeyboardEvent($event)" } }, viewQueries: [{ propertyName: "centerEl", first: true, predicate: ["center"], descendants: true }], usesOnChanges: true, ngImport: i0, template: `
@@ -599,14 +630,31 @@ class WeissAccessibilityCenterComponent {
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
+      [id]="targetId"
       #center
     >
-    <div class="background-overlay" *ngIf="currentOptions.overlay" (click)="weissAccessibilityCenterService.toggleWeissAccessibilityCenter(null, true)"></div>
+      <div
+        class="background-overlay"
+        *ngIf="currentOptions.overlay"
+        (click)="
+          weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
+            null,
+            true
+          )
+        "
+      ></div>
       <ng-container *ngIf="currentOptions.displayType === 'panel'">
-        <weiss-accessibility-panel (statusMessageChange)="onStatusMessageChange($event)" [data]="data"></weiss-accessibility-panel>
+        <weiss-accessibility-panel
+          (statusMessageChange)="onStatusMessageChange($event)"
+          [data]="data"
+        ></weiss-accessibility-panel>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'strip'">
-        <weiss-accessibility-strip [closeSelectionPanel]="forceCloseSelectionPanel" (statusMessageChange)="onStatusMessageChange($event)" [data]="data"></weiss-accessibility-strip>
+        <weiss-accessibility-strip
+          [closeSelectionPanel]="forceCloseSelectionPanel"
+          (statusMessageChange)="onStatusMessageChange($event)"
+          [data]="data"
+        ></weiss-accessibility-strip>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'popover'">
         <!-- <weiss-accessibility-popover></weiss-accessibility-popover> -->
@@ -625,20 +673,37 @@ class WeissAccessibilityCenterComponent {
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterComponent, decorators: [{
             type: Component,
             args: [{
-                    selector: 'weiss-accessibility-center',
+                    selector: "weiss-accessibility-center",
                     template: `
     <article
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
+      [id]="targetId"
       #center
     >
-    <div class="background-overlay" *ngIf="currentOptions.overlay" (click)="weissAccessibilityCenterService.toggleWeissAccessibilityCenter(null, true)"></div>
+      <div
+        class="background-overlay"
+        *ngIf="currentOptions.overlay"
+        (click)="
+          weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
+            null,
+            true
+          )
+        "
+      ></div>
       <ng-container *ngIf="currentOptions.displayType === 'panel'">
-        <weiss-accessibility-panel (statusMessageChange)="onStatusMessageChange($event)" [data]="data"></weiss-accessibility-panel>
+        <weiss-accessibility-panel
+          (statusMessageChange)="onStatusMessageChange($event)"
+          [data]="data"
+        ></weiss-accessibility-panel>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'strip'">
-        <weiss-accessibility-strip [closeSelectionPanel]="forceCloseSelectionPanel" (statusMessageChange)="onStatusMessageChange($event)" [data]="data"></weiss-accessibility-strip>
+        <weiss-accessibility-strip
+          [closeSelectionPanel]="forceCloseSelectionPanel"
+          (statusMessageChange)="onStatusMessageChange($event)"
+          [data]="data"
+        ></weiss-accessibility-strip>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'popover'">
         <!-- <weiss-accessibility-popover></weiss-accessibility-popover> -->
@@ -657,7 +722,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
                 }]
         }], ctorParameters: () => [{ type: WeissAccessibilityCenterService }], propDecorators: { centerEl: [{
                 type: ViewChild,
-                args: ['center']
+                args: ["center"]
             }], options: [{
                 type: Input
             }], title: [{
@@ -684,7 +749,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
                 type: Input
             }], handleKeyboardEvent: [{
                 type: HostListener,
-                args: ['keydown', ['$event']]
+                args: ["keydown", ["$event"]]
             }] } });
 
 // a11y-trigger.directive.ts
@@ -692,7 +757,7 @@ class WeissAccessibilityToggleDirective {
     el;
     renderer;
     accessibilityService;
-    targetId = 'weissAccessibilityCenter';
+    targetId;
     ariaExpanded = false;
     subscription = new Subscription();
     constructor(el, renderer, accessibilityService) {
@@ -709,6 +774,7 @@ class WeissAccessibilityToggleDirective {
         if (!this.el.nativeElement.id) {
             this.renderer.setAttribute(this.el.nativeElement, 'id', 'weiss-a11y-toggle');
         }
+        this.accessibilityService.setTargetId(this.targetId ?? null);
         // Ensure the element is focusable if it's not inherently focusable
         this.makeElementFocusable();
         // Subscribe to the widget visibility observable to update 'aria-expanded'
