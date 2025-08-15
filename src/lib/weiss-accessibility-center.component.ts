@@ -5,6 +5,7 @@ import {
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
+  OnDestroy
 } from "@angular/core";
 import {
   AccessibilityOptions,
@@ -25,7 +26,7 @@ import { Subject, takeUntil } from "rxjs";
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
-      [id]="targetId"
+      [attr.id]="(weissAccessibilityCenterService.targetId$ | async) ?? null"
       #center
     >
       <div
@@ -66,7 +67,7 @@ import { Subject, takeUntil } from "rxjs";
   `,
   encapsulation: ViewEncapsulation.None,
 })
-export class WeissAccessibilityCenterComponent {
+export class WeissAccessibilityCenterComponent implements OnDestroy {
   @ViewChild("center") centerEl: any;
 
   @Input() options: AccessibilityOptions | undefined;
@@ -87,7 +88,6 @@ export class WeissAccessibilityCenterComponent {
 
   public showWeissAccessibilityCenter = false;
   public data: PanelData | undefined;
-  public targetId: string | null = null;
 
   private firstFocusableElement: HTMLElement | null = null;
   private lastFocusableElement: HTMLElement | null = null;
@@ -135,11 +135,7 @@ export class WeissAccessibilityCenterComponent {
           }, 0);
         }
       });
-    this.weissAccessibilityCenterService.targetId$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((id) => {
-        this.targetId = id;
-      });
+    // Removed targetId$ subscription and local state; template binds via async pipe.
   }
 
   // This method is triggered when the child component emits a new status message
@@ -174,7 +170,7 @@ export class WeissAccessibilityCenterComponent {
             this.firstFocusableElement?.focus();
           }
         }
-        this.scrollElementIntoView(deepActiveElement);
+        this.scrollElementIntoView(deepActiveElement as Element);
       } else if (event.key === "Escape") {
         this.weissAccessibilityCenterService.toggleWeissAccessibilityCenter(
           null,
@@ -349,7 +345,7 @@ export class WeissAccessibilityCenterComponent {
   }
 
   ngOnDestroy(): void {
-        // Clear any pending timeouts
+    // Clear any pending timeouts
     if (this.focusTimeoutId !== null) {
       clearTimeout(this.focusTimeoutId);
       this.focusTimeoutId = null;
