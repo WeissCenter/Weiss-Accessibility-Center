@@ -1,10 +1,11 @@
-import { SimpleChanges, OnDestroy } from "@angular/core";
+import { SimpleChanges, OnDestroy, AfterViewInit, Renderer2, ElementRef } from "@angular/core";
 import { AccessibilityOptions, DisplayType, ModuleOptions, ModuleTypes, PanelData, PositionOptions } from "./weiss-accessibility-center.interfaces";
 import { WeissAccessibilityCenterService } from "./weiss-accessibility-center.service";
 import * as i0 from "@angular/core";
-export declare class WeissAccessibilityCenterComponent implements OnDestroy {
+export declare class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewInit {
     weissAccessibilityCenterService: WeissAccessibilityCenterService;
-    centerEl: any;
+    private renderer;
+    centerEl: ElementRef<HTMLElement>;
     options: AccessibilityOptions | undefined;
     title: string | undefined;
     description: string | undefined;
@@ -27,7 +28,8 @@ export declare class WeissAccessibilityCenterComponent implements OnDestroy {
     forceCloseSelectionPanel: boolean;
     private focusTimeoutId;
     private destroy$;
-    constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService);
+    constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService, renderer: Renderer2);
+    ngAfterViewInit(): void;
     onStatusMessageChange(newMessage: string): void;
     private scrollElementIntoView;
     handleKeyboardEvent(event: KeyboardEvent): void;

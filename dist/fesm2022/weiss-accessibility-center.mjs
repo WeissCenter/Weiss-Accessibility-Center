@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { PLATFORM_ID, Injectable, Inject, EventEmitter, Component, ViewEncapsulation, Input, Output, ViewChild, ViewChildren, HostListener, Directive, NgModule } from '@angular/core';
+import { PLATFORM_ID, Injectable, Inject, EventEmitter, Component, ViewEncapsulation, Input, Output, ViewChild, ViewChildren, ElementRef, HostListener, Directive, NgModule } from '@angular/core';
 import { BehaviorSubject, Subject, takeUntil, Subscription } from 'rxjs';
 import * as i2 from '@angular/common';
 import { isPlatformBrowser, DOCUMENT, CommonModule, AsyncPipe } from '@angular/common';
@@ -380,6 +380,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
 
 class WeissAccessibilityCenterComponent {
     weissAccessibilityCenterService;
+    renderer;
     centerEl;
     options;
     title;
@@ -404,8 +405,9 @@ class WeissAccessibilityCenterComponent {
     forceCloseSelectionPanel = false;
     focusTimeoutId = null;
     destroy$ = new Subject();
-    constructor(weissAccessibilityCenterService) {
+    constructor(weissAccessibilityCenterService, renderer) {
         this.weissAccessibilityCenterService = weissAccessibilityCenterService;
+        this.renderer = renderer;
         this.currentOptions = createAccessibilityOptions(this.weissAccessibilityCenterService);
         this.setupOptions();
         this.weissAccessibilityCenterService.showWeissAccessibilityCenter$
@@ -413,7 +415,6 @@ class WeissAccessibilityCenterComponent {
             .subscribe((show) => {
             this.showWeissAccessibilityCenter = show;
             this.forceCloseSelectionPanel = !show;
-            // Clear any pending focus timeout when closing
             if (!show && this.focusTimeoutId !== null) {
                 clearTimeout(this.focusTimeoutId);
                 this.focusTimeoutId = null;
@@ -423,14 +424,21 @@ class WeissAccessibilityCenterComponent {
                 this.firstFocusableElement = focusableElements[0];
                 this.lastFocusableElement =
                     focusableElements[focusableElements.length - 1];
-                // Focus the first focusable element on next tick, track timeout for cleanup
                 this.focusTimeoutId = window.setTimeout(() => {
                     this.firstFocusableElement?.focus();
                     this.focusTimeoutId = null;
                 }, 0);
             }
         });
-        // Removed targetId$ subscription and local state; template binds via async pipe.
+    }
+    ngAfterViewInit() {
+        // Apply id to the actual <article> after it's in the DOM
+        this.weissAccessibilityCenterService.targetId$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((id) => {
+            const value = id ?? 'weiss-accessibility-center';
+            this.renderer.setAttribute(this.centerEl.nativeElement, 'id', value);
+        });
     }
     // This method is triggered when the child component emits a new status message
     onStatusMessageChange(newMessage) {
@@ -611,7 +619,6 @@ class WeissAccessibilityCenterComponent {
         return data;
     }
     ngOnDestroy() {
-        // Clear any pending timeouts
         if (this.focusTimeoutId !== null) {
             clearTimeout(this.focusTimeoutId);
             this.focusTimeoutId = null;
@@ -619,13 +626,12 @@ class WeissAccessibilityCenterComponent {
         this.destroy$.next();
         this.destroy$.complete();
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterComponent, deps: [{ token: WeissAccessibilityCenterService }], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.2.8", type: WeissAccessibilityCenterComponent, selector: "weiss-accessibility-center", inputs: { options: "options", title: "title", description: "description", displayType: "displayType", overlay: "overlay", position: "position", modules: "modules", fontSize: "fontSize", theme: "theme", spacing: "spacing", layout: "layout", multiSelectableAccordions: "multiSelectableAccordions" }, host: { listeners: { "keydown": "handleKeyboardEvent($event)" } }, viewQueries: [{ propertyName: "centerEl", first: true, predicate: ["center"], descendants: true }], usesOnChanges: true, ngImport: i0, template: `
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterComponent, deps: [{ token: WeissAccessibilityCenterService }, { token: i0.Renderer2 }], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.2.8", type: WeissAccessibilityCenterComponent, selector: "weiss-accessibility-center", inputs: { options: "options", title: "title", description: "description", displayType: "displayType", overlay: "overlay", position: "position", modules: "modules", fontSize: "fontSize", theme: "theme", spacing: "spacing", layout: "layout", multiSelectableAccordions: "multiSelectableAccordions" }, host: { listeners: { "keydown": "handleKeyboardEvent($event)" } }, viewQueries: [{ propertyName: "centerEl", first: true, predicate: ["center"], descendants: true, read: ElementRef }], usesOnChanges: true, ngImport: i0, template: `
     <article
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
-      [attr.id]="(weissAccessibilityCenterService.targetId$ | async) ?? null"
       #center
     >
       <div
@@ -663,7 +669,7 @@ class WeissAccessibilityCenterComponent {
         {{ statusMessage }}
       </div>
     </article>
-  `, isInline: true, dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "component", type: StripComponent, selector: "weiss-accessibility-strip", inputs: ["data", "closeSelectionPanel"], outputs: ["statusMessageChange"] }, { kind: "component", type: PanelComponent, selector: "weiss-accessibility-panel", inputs: ["data"], outputs: ["statusMessageChange"] }, { kind: "pipe", type: i2.AsyncPipe, name: "async" }], encapsulation: i0.ViewEncapsulation.None });
+  `, isInline: true, dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "component", type: StripComponent, selector: "weiss-accessibility-strip", inputs: ["data", "closeSelectionPanel"], outputs: ["statusMessageChange"] }, { kind: "component", type: PanelComponent, selector: "weiss-accessibility-panel", inputs: ["data"], outputs: ["statusMessageChange"] }], encapsulation: i0.ViewEncapsulation.None });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImport: i0, type: WeissAccessibilityCenterComponent, decorators: [{
             type: Component,
@@ -674,7 +680,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
       role="dialog"
       aria-modal="true"
       [hidden]="!showWeissAccessibilityCenter"
-      [attr.id]="(weissAccessibilityCenterService.targetId$ | async) ?? null"
       #center
     >
       <div
@@ -715,9 +720,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
   `,
                     encapsulation: ViewEncapsulation.None,
                 }]
-        }], ctorParameters: () => [{ type: WeissAccessibilityCenterService }], propDecorators: { centerEl: [{
+        }], ctorParameters: () => [{ type: WeissAccessibilityCenterService }, { type: i0.Renderer2 }], propDecorators: { centerEl: [{
                 type: ViewChild,
-                args: ["center"]
+                args: ["center", { read: ElementRef }]
             }], options: [{
                 type: Input
             }], title: [{
