@@ -25,9 +25,11 @@ import { Subject, takeUntil } from "rxjs";
 @Component({
   selector: "weiss-accessibility-center",
   template: `
-    <article
+    <div
       role="dialog"
+      aria-labelledby="accessibilityCenterTitle"
       aria-modal="true"
+      [attr.name]="accessibleName"
       [hidden]="!showWeissAccessibilityCenter"
       #center
     >
@@ -65,7 +67,7 @@ import { Subject, takeUntil } from "rxjs";
       >
         {{ statusMessage }}
       </div>
-    </article>
+        </div>
   `,
   encapsulation: ViewEncapsulation.None,
 })
@@ -101,6 +103,8 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
 
   private focusTimeoutId: number | null = null;
   private destroy$ = new Subject<void>();
+
+  public accessibleName = "Weiss Accessibility Center";
 
   constructor(
     public weissAccessibilityCenterService: WeissAccessibilityCenterService,
@@ -140,7 +144,7 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    // Apply id to the actual <article> after it's in the DOM
+    // Apply id to the actual <div> after it's in the DOM
     this.renderer.setAttribute(this.centerEl.nativeElement, 'id', 'weiss-accessibility-center');
     this.weissAccessibilityCenterService.targetId$
       .pipe(takeUntil(this.destroy$))
