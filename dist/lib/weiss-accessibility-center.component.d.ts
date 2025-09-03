@@ -28,6 +28,7 @@ export declare class WeissAccessibilityCenterComponent implements OnDestroy, Aft
     forceCloseSelectionPanel: boolean;
     private focusTimeoutId;
     private destroy$;
+    accessibleName: string;
     constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService, renderer: Renderer2);
     ngAfterViewInit(): void;
     onStatusMessageChange(newMessage: string): void;
