@@ -32,7 +32,7 @@ Install the package directly from the GitHub repository via npm:
 
 ```bash
 
-npm install git+https://github.com/WeissCenter/Weiss-Accessibility-Center#v1.0.1
+npm install git+https://github.com/WeissCenter/Weiss-Accessibility-Center#v1.3.0
 
 ```
 
@@ -195,9 +195,84 @@ The options object supports customization for several modules such as font size,
 | **theme** | The theme module configuration | See below
 | **spacing** | The spacing module configuration | See below
 | **layout** | The layout module configuration | See below
+| **languageMap** | An object mapping language codes to translation strings for the accessibility center | See below
+| **selectedLanguage** | The currently selected language code (e.g., 'en', 'es') | 'en'
 
-### 7. Supported Font Size Options
-The font size module supports customizing the font size options. You can pass in an array of objects with a name and value for each option:
+#### Language Map Support
+
+You can pass a `languageMap` input to the accessibility center to provide custom translations for different languages. The component will use the provided map to swap out text dynamically when the selected language changes.
+
+**Example:**
+
+```typescript
+languageMap = {
+  en: {
+    // Center level
+    title: 'Accessibility Center',
+    description: 'Adjust accessibility settings.',
+
+    // Module titles & descriptions
+    fontSizeTitle: 'Font Size',
+    fontSizeDescription: 'Adjust the font size.',
+    themeTitle: 'Theme',
+    themeDescription: 'Switch between themes.',
+    spacingTitle: 'Spacing',
+    spacingDescription: 'Adjust spacing between elements.',
+    layoutTitle: 'Layout',
+    layoutDescription: 'Change how content is arranged.',
+
+    // Option labels (pattern: <module>Option<PascalCase(value)>)
+    fontSizeOptionDefault: 'Default at 100%',
+    fontSizeOptionSmaller: 'Decrease to 85%',
+    fontSizeOptionLarge: 'Increase to 125%',
+    fontSizeOptionLarger: 'Increase to 150%',
+    fontSizeOptionLargest: 'Increase to 200%',
+    themeOptionDefault: 'Default light',
+    themeOptionDynamicDark: 'Default dark',
+    themeOptionHighContrast: 'High contrast',
+    themeOptionMonochrome: 'Monochrome',
+
+    // Action labels
+    closeLabel: 'Close',
+    resetAllLabel: 'Reset all settings',
+    resetLabel: 'Reset',
+    resetStatusMessage: 'Options Reset'
+  },
+  es: {
+    title: 'Centro de Accesibilidad',
+    description: 'Ajusta la configuración de accesibilidad.',
+    fontSizeTitle: 'Tamaño de fuente',
+    fontSizeDescription: 'Ajusta el tamaño de la fuente.',
+    themeTitle: 'Tema',
+    themeDescription: 'Cambia entre temas.'
+  }
+};
+
+selectedLanguage = 'en'; // or 'es', etc.
+
+// Usage in template:
+<weiss-accessibility-center
+  [languageMap]="languageMap"
+  [selectedLanguage]="selectedLanguage"
+  [options]="options"
+></weiss-accessibility-center>
+```
+
+**Required/Supported Keys:**
+
+- `title`: Title for the accessibility center
+- `description`: Description text
+- `fontSizeTitle`, `fontSizeDescription`: Font size module text
+- `themeTitle`, `themeDescription`: Theme module text
+- `spacingTitle`, `spacingDescription`: Spacing module text
+- `layoutTitle`, `layoutDescription`: Layout module text
+- `closeLabel`: Label for close buttons
+- `resetAllLabel`: Label for panel reset-all button
+- `resetLabel`: Label for strip view reset button
+- `resetStatusMessage`: Live-region status message when reset occurs
+- Option labels follow: `<module>Option<PascalCase(optionValue)>` (e.g., `themeOptionDynamicDark`, `fontSizeOptionLargest`)
+
+When the `selectedLanguage` input changes, the component will automatically update all relevant text using the provided `languageMap`.
 
 ```typescript
 fontSize: {

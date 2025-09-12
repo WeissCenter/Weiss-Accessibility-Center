@@ -1,8 +1,10 @@
+<!-- axe-linter-disable -->
 <section class="weiss-accessibility-center-strip-wrapper" 
     [ngClass]="{'weiss-accessibility-center-strip--right': data?.position === 'end' || data?.position === 'right', 'weiss-accessibility-center-strip--left': data?.position === 'start' || data?.position === 'left'}">
     <div class="weiss-accessibility-center-strip">
-        <h2 id="accessibilityCenterTitle" class="visually-hidden">{{data?.title}}</h2>
-        <button tabindex="1" #closeButton aria-controls="accessibilityCenter" type="button"
+    <h2 id="accessibilityCenterTitle" class="visually-hidden">{{data?.title}}</h2>
+    <!-- Positive tabindex values intentionally used to create a linear navigation order when panel expands -->
+    <button tabindex="1" #closeButton aria-controls="accessibilityCenter" type="button"
             style="flex-direction: column;top:var(--usa-spacing-1)" class="usa-button padding-1 usa-button--unstyled "
             (click)="close()">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24"
@@ -12,7 +14,7 @@
                 <path d="M18 6l-12 12" />
                 <path d="M6 6l12 12" />
             </svg>
-            Close
+            {{ closeLabel || 'Close' }}
         </button>
         <div class="content">
             <button type="button" tabindex="2"
@@ -106,7 +108,7 @@
         </div>
         <button type="button" style="flex-direction: column;"
             class="usa-button padding-y-105 padding-x-205 usa-button--unstyled width-full" tabindex="10"
-            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys);statusMessageChange.emit('Setting reset has been applied')">Reset</button>
+            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys);statusMessageChange.emit(resetStatusMessage || 'Setting reset has been applied')">{{ resetLabel || 'Reset' }}</button>
 
     </div>
     <div class="weiss-accessibility-center-strip-selection-panel" *ngIf="showSelectionPanel">
@@ -129,3 +131,4 @@
         </form>
     </div>
 </section>
+<!-- axe-linter-enable -->

@@ -24,6 +24,10 @@ import { WeissAccessibilityCenterService } from "../../weiss-accessibility-cente
 })
 export class PanelComponent {
   @Input() data: PanelData | undefined;
+  // Optional translated labels provided through data/title or external mapping
+  @Input() closeLabel?: string;
+  @Input() resetAllLabel?: string;
+  @Input() resetStatusMessage?: string;
   @Output() statusMessageChange = new EventEmitter<string>();
   @ViewChild("accessibilityPanel") panelContent!: ElementRef;
   @ViewChildren("accordionButton") accordionButtons!: QueryList<ElementRef>;

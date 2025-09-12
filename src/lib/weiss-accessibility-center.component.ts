@@ -19,7 +19,7 @@ import {
   PositionOptions,
 } from "./weiss-accessibility-center.interfaces";
 import { WeissAccessibilityCenterService } from "./weiss-accessibility-center.service";
-import { createAccessibilityOptions } from "./weiss-accessibility-center.factory";
+import { createAccessibilityOptions, TranslationFn } from "./weiss-accessibility-center.factory";
 import { Subject, takeUntil } from "rxjs";
 
 @Component({
@@ -47,6 +47,9 @@ import { Subject, takeUntil } from "rxjs";
         <weiss-accessibility-panel
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetAllLabel]="resetAllLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-panel>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'strip'">
@@ -54,6 +57,9 @@ import { Subject, takeUntil } from "rxjs";
           [closeSelectionPanel]="forceCloseSelectionPanel"
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetLabel]="resetLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-strip>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'popover'">
@@ -86,6 +92,18 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
   @Input() spacing: ModuleOptions | undefined;
   @Input() layout: ModuleOptions | undefined;
   @Input() multiSelectableAccordions: boolean | undefined;
+  /**
+   * Optional language map for custom translations. Example:
+   * {
+   *   en: { title: 'Accessibility', description: '...' },
+   *   es: { title: 'Accesibilidad', description: '...' }
+   * }
+   */
+  @Input() languageMap?: { [lang: string]: { [key: string]: string } };
+  /**
+   * Currently selected language code
+   */
+  @Input() selectedLanguage?: string;
 
   // Merged options object that will be used within the component
   currentOptions: AccessibilityOptions;
@@ -106,12 +124,42 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
 
   public accessibleName = "Weiss Accessibility Center";
 
+  // Action label getters using translation function
+  get closeLabel(): string {
+    return this.translationFn('closeLabel', 'Close');
+  }
+  get resetAllLabel(): string {
+    return this.translationFn('resetAllLabel', 'Reset all settings');
+  }
+  get resetLabel(): string {
+    return this.translationFn('resetLabel', 'Reset');
+  }
+  get resetStatusMessage(): string {
+    return this.translationFn('resetStatusMessage', 'Options Reset');
+  }
+
+  /**
+   * Returns the translated string for a given key, using languageMap if available
+   */
+  getTranslation(key: string, fallback: string): string {
+    if (
+      this.languageMap &&
+      this.selectedLanguage &&
+      this.languageMap[this.selectedLanguage] &&
+      this.languageMap[this.selectedLanguage][key]
+    ) {
+      return this.languageMap[this.selectedLanguage][key];
+    }
+    return fallback;
+  }
+
   constructor(
     public weissAccessibilityCenterService: WeissAccessibilityCenterService,
     private renderer: Renderer2
   ) {
     this.currentOptions = createAccessibilityOptions(
-      this.weissAccessibilityCenterService
+      this.weissAccessibilityCenterService,
+      this.translationFn
     );
     this.setupOptions();
 
@@ -272,23 +320,26 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
         changes["multiSelectableAccordions"].previousValue
     ) {
       this.setupOptions();
+    } else if (
+      (changes["languageMap"] && changes["languageMap"].currentValue !== changes["languageMap"].previousValue) ||
+      (changes["selectedLanguage"] && changes["selectedLanguage"].currentValue !== changes["selectedLanguage"].previousValue)
+    ) {
+      this.setupOptions();
     }
   }
 
   setupOptions() {
     // Merge the provided options with the default ones
     const mergedOptions = {
-      ...createAccessibilityOptions(this.weissAccessibilityCenterService),
+      ...createAccessibilityOptions(this.weissAccessibilityCenterService, this.translationFn),
       ...this.options,
     };
 
     // If an option was passed individually, override in mergedOptions
-    if (this.title) {
-      mergedOptions.title = this.title;
-    }
-    if (this.description) {
-      mergedOptions.description = this.description;
-    }
+    // For title/description, use translation if available
+    mergedOptions.title = this.translationFn('title', this.title ?? mergedOptions.title ?? 'Accessibility settings');
+    mergedOptions.description = this.translationFn('description', this.description ?? mergedOptions.description ?? 'Adjust the settings below to customize the appearance of this website.');
+
     if (this.displayType) {
       mergedOptions.displayType = this.displayType;
     }
@@ -306,7 +357,6 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
     }
     if (this.fontSize) {
       mergedOptions.fontSize = this.fontSize;
-      // If fontSize was passed in specifically, check to be sure it's included in the modules list. If not, add it.
       if (
         mergedOptions.include &&
         !mergedOptions.include.includes("fontSize")
@@ -348,10 +398,8 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
       moduleData[module] = this.currentOptions[module];
     });
     const data: PanelData = {
-      title: this.currentOptions.title || "Accessibility settings",
-      description:
-        this.currentOptions.description ||
-        "Adjust the settings below to customize the appearance of this website.",
+      title: this.currentOptions.title,
+      description: this.currentOptions.description,
       modules: moduleData,
       multiSelectableAccordions:
         this.currentOptions.multiSelectableAccordions || false,
@@ -359,6 +407,18 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
     };
     return data;
   }
+
+  private translationFn: TranslationFn = (key: string, fallback: string) => {
+    if (
+      this.languageMap &&
+      this.selectedLanguage &&
+      this.languageMap[this.selectedLanguage] &&
+      this.languageMap[this.selectedLanguage][key]
+    ) {
+      return this.languageMap[this.selectedLanguage][key];
+    }
+    return fallback;
+  };
 
   ngOnDestroy(): void {
     if (this.focusTimeoutId !== null) {

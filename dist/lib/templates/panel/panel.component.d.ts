@@ -5,6 +5,9 @@ import * as i0 from "@angular/core";
 export declare class PanelComponent {
     weissAccessibilityCenterService: WeissAccessibilityCenterService;
     data: PanelData | undefined;
+    closeLabel?: string;
+    resetAllLabel?: string;
+    resetStatusMessage?: string;
     statusMessageChange: EventEmitter<string>;
     panelContent: ElementRef;
     accordionButtons: QueryList<ElementRef>;
@@ -20,5 +23,5 @@ export declare class PanelComponent {
     close(): void;
     ngOnInit(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<PanelComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<PanelComponent, "weiss-accessibility-panel", never, { "data": { "alias": "data"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, false, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<PanelComponent, "weiss-accessibility-panel", never, { "data": { "alias": "data"; "required": false; }; "closeLabel": { "alias": "closeLabel"; "required": false; }; "resetAllLabel": { "alias": "resetAllLabel"; "required": false; }; "resetStatusMessage": { "alias": "resetStatusMessage"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, false, never>;
 }
