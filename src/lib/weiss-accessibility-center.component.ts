@@ -47,6 +47,9 @@ import { Subject, takeUntil } from "rxjs";
         <weiss-accessibility-panel
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetAllLabel]="resetAllLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-panel>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'strip'">
@@ -54,6 +57,9 @@ import { Subject, takeUntil } from "rxjs";
           [closeSelectionPanel]="forceCloseSelectionPanel"
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetLabel]="resetLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-strip>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'popover'">
@@ -117,6 +123,20 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
   private destroy$ = new Subject<void>();
 
   public accessibleName = "Weiss Accessibility Center";
+
+  // Action label getters using translation function
+  get closeLabel(): string {
+    return this.translationFn('closeLabel', 'Close');
+  }
+  get resetAllLabel(): string {
+    return this.translationFn('resetAllLabel', 'Reset all settings');
+  }
+  get resetLabel(): string {
+    return this.translationFn('resetLabel', 'Reset');
+  }
+  get resetStatusMessage(): string {
+    return this.translationFn('resetStatusMessage', 'Options Reset');
+  }
 
   /**
    * Returns the translated string for a given key, using languageMap if available

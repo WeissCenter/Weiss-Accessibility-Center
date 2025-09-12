@@ -45,6 +45,10 @@ export declare class WeissAccessibilityCenterComponent implements OnDestroy, Aft
     private focusTimeoutId;
     private destroy$;
     accessibleName: string;
+    get closeLabel(): string;
+    get resetAllLabel(): string;
+    get resetLabel(): string;
+    get resetStatusMessage(): string;
     /**
      * Returns the translated string for a given key, using languageMap if available
      */

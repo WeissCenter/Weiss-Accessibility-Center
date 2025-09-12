@@ -454,6 +454,19 @@ class WeissAccessibilityCenterComponent {
     focusTimeoutId = null;
     destroy$ = new Subject();
     accessibleName = "Weiss Accessibility Center";
+    // Action label getters using translation function
+    get closeLabel() {
+        return this.translationFn('closeLabel', 'Close');
+    }
+    get resetAllLabel() {
+        return this.translationFn('resetAllLabel', 'Reset all settings');
+    }
+    get resetLabel() {
+        return this.translationFn('resetLabel', 'Reset');
+    }
+    get resetStatusMessage() {
+        return this.translationFn('resetStatusMessage', 'Options Reset');
+    }
     /**
      * Returns the translated string for a given key, using languageMap if available
      */
@@ -720,6 +733,9 @@ class WeissAccessibilityCenterComponent {
         <weiss-accessibility-panel
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetAllLabel]="resetAllLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-panel>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'strip'">
@@ -727,6 +743,9 @@ class WeissAccessibilityCenterComponent {
           [closeSelectionPanel]="forceCloseSelectionPanel"
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetLabel]="resetLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-strip>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'popover'">
@@ -770,6 +789,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
         <weiss-accessibility-panel
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetAllLabel]="resetAllLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-panel>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'strip'">
@@ -777,6 +799,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.8", ngImpor
           [closeSelectionPanel]="forceCloseSelectionPanel"
           (statusMessageChange)="onStatusMessageChange($event)"
           [data]="data"
+          [closeLabel]="closeLabel"
+          [resetLabel]="resetLabel"
+          [resetStatusMessage]="resetStatusMessage"
         ></weiss-accessibility-strip>
       </ng-container>
       <ng-container *ngIf="currentOptions.displayType === 'popover'">
