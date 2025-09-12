@@ -10,6 +10,9 @@ import { WeissAccessibilitySettings, ModuleTypes, PanelData } from '../../weiss-
 })
 export class StripComponent {
   @Input() data: PanelData | undefined;
+  @Input() closeLabel?: string;
+  @Input() resetLabel?: string;
+  @Input() resetStatusMessage?: string;
   @Output() statusMessageChange = new EventEmitter<string>();
 
   public moduleKeys: ModuleTypes[] = [];

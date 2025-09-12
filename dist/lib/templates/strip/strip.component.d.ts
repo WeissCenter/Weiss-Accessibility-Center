@@ -5,6 +5,9 @@ import * as i0 from "@angular/core";
 export declare class StripComponent {
     weissAccessibilityCenterService: WeissAccessibilityCenterService;
     data: PanelData | undefined;
+    closeLabel?: string;
+    resetLabel?: string;
+    resetStatusMessage?: string;
     statusMessageChange: EventEmitter<string>;
     moduleKeys: ModuleTypes[];
     selectedModule: ModuleTypes | undefined;
@@ -19,5 +22,5 @@ export declare class StripComponent {
     ngOnInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<StripComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<StripComponent, "weiss-accessibility-strip", never, { "data": { "alias": "data"; "required": false; }; "closeSelectionPanel": { "alias": "closeSelectionPanel"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, false, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<StripComponent, "weiss-accessibility-strip", never, { "data": { "alias": "data"; "required": false; }; "closeLabel": { "alias": "closeLabel"; "required": false; }; "resetLabel": { "alias": "resetLabel"; "required": false; }; "resetStatusMessage": { "alias": "resetStatusMessage"; "required": false; }; "closeSelectionPanel": { "alias": "closeSelectionPanel"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, false, never>;
 }

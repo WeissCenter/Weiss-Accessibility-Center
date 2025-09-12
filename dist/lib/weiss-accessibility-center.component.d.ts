@@ -18,6 +18,22 @@ export declare class WeissAccessibilityCenterComponent implements OnDestroy, Aft
     spacing: ModuleOptions | undefined;
     layout: ModuleOptions | undefined;
     multiSelectableAccordions: boolean | undefined;
+    /**
+     * Optional language map for custom translations. Example:
+     * {
+     *   en: { title: 'Accessibility', description: '...' },
+     *   es: { title: 'Accesibilidad', description: '...' }
+     * }
+     */
+    languageMap?: {
+        [lang: string]: {
+            [key: string]: string;
+        };
+    };
+    /**
+     * Currently selected language code
+     */
+    selectedLanguage?: string;
     currentOptions: AccessibilityOptions;
     showWeissAccessibilityCenter: boolean;
     data: PanelData | undefined;
@@ -29,6 +45,10 @@ export declare class WeissAccessibilityCenterComponent implements OnDestroy, Aft
     private focusTimeoutId;
     private destroy$;
     accessibleName: string;
+    /**
+     * Returns the translated string for a given key, using languageMap if available
+     */
+    getTranslation(key: string, fallback: string): string;
     constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService, renderer: Renderer2);
     ngAfterViewInit(): void;
     onStatusMessageChange(newMessage: string): void;
@@ -37,7 +57,8 @@ export declare class WeissAccessibilityCenterComponent implements OnDestroy, Aft
     ngOnChanges(changes: SimpleChanges): void;
     setupOptions(): void;
     buildData(): PanelData;
+    private translationFn;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<WeissAccessibilityCenterComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<WeissAccessibilityCenterComponent, "weiss-accessibility-center", never, { "options": { "alias": "options"; "required": false; }; "title": { "alias": "title"; "required": false; }; "description": { "alias": "description"; "required": false; }; "displayType": { "alias": "displayType"; "required": false; }; "overlay": { "alias": "overlay"; "required": false; }; "position": { "alias": "position"; "required": false; }; "modules": { "alias": "modules"; "required": false; }; "fontSize": { "alias": "fontSize"; "required": false; }; "theme": { "alias": "theme"; "required": false; }; "spacing": { "alias": "spacing"; "required": false; }; "layout": { "alias": "layout"; "required": false; }; "multiSelectableAccordions": { "alias": "multiSelectableAccordions"; "required": false; }; }, {}, never, never, false, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<WeissAccessibilityCenterComponent, "weiss-accessibility-center", never, { "options": { "alias": "options"; "required": false; }; "title": { "alias": "title"; "required": false; }; "description": { "alias": "description"; "required": false; }; "displayType": { "alias": "displayType"; "required": false; }; "overlay": { "alias": "overlay"; "required": false; }; "position": { "alias": "position"; "required": false; }; "modules": { "alias": "modules"; "required": false; }; "fontSize": { "alias": "fontSize"; "required": false; }; "theme": { "alias": "theme"; "required": false; }; "spacing": { "alias": "spacing"; "required": false; }; "layout": { "alias": "layout"; "required": false; }; "multiSelectableAccordions": { "alias": "multiSelectableAccordions"; "required": false; }; "languageMap": { "alias": "languageMap"; "required": false; }; "selectedLanguage": { "alias": "selectedLanguage"; "required": false; }; }, {}, never, never, false, never>;
 }
