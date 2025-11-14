@@ -449,6 +449,7 @@ html[data-weiss-accessibility-theme="monochrome"], html[data-weiss-accessibility
   --usa-error-base: #000;
   --usa-error-dark: #000;
   --usa-error-darker: #000;
+  --weiss-accessibility-center-overlay-background: rgba(0, 0, 0, .575);
 }
 
 html[data-weiss-accessibility-theme="monochrome"] dialog:before, html[data-weiss-accessibility-theme="monochrome"] .background-overlay {
