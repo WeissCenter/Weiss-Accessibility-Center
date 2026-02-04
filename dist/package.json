@@ -11,10 +11,11 @@
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
-  "main": "dist/weiss-accessibility-center.js",
+  "main": "dist/fesm2022/weiss-accessibility-center.mjs",
   "module": "fesm2022/weiss-accessibility-center.mjs",
-  "typings": "index.d.ts",
+  "types": "dist/index.d.ts",
   "sideEffects": false,
+  "typings": "index.d.ts",
   "exports": {
     "./package.json": {
       "default": "./package.json"
