@@ -67,8 +67,9 @@ import { Subject, takeUntil } from "rxjs";
       </ng-container>
       <div
         aria-live="polite"
+        role="status"
+        aria-atomic="true"
         id="statusMessage"
-        *ngIf="statusMessage"
         class="visually-hidden"
       >
         {{ statusMessage }}
@@ -135,7 +136,7 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
     return this.translationFn('resetLabel', 'Reset');
   }
   get resetStatusMessage(): string {
-    return this.translationFn('resetStatusMessage', 'Options Reset');
+    return this.translationFn('resetStatusMessage', 'All settings have been reset to default.');
   }
 
   /**

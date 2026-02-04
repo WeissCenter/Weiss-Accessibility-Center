@@ -108,7 +108,7 @@
         </div>
         <button type="button" style="flex-direction: column;"
             class="usa-button padding-y-105 padding-x-205 usa-button--unstyled width-full" tabindex="10"
-            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys);statusMessageChange.emit(resetStatusMessage || 'Setting reset has been applied')">{{ resetLabel || 'Reset' }}</button>
+            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys); statusMessageChange.emit(resetStatusMessage)">{{ resetLabel || 'Reset' }}</button>
 
     </div>
     <div class="weiss-accessibility-center-strip-selection-panel" *ngIf="showSelectionPanel">

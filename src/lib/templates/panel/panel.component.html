@@ -149,6 +149,6 @@
     </div>
     <div class="display-flex margin-top-2 gap-2 padding-x-2 padding-bottom-2">
         <button type="button" class="usa-button usa-button--unstyled"
-            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys);statusMessageChange.emit(resetStatusMessage || 'Options Reset')">{{ resetAllLabel || 'Reset all settings' }}</button>
+            (click)="weissAccessibilityCenterService.resetSettings(moduleKeys); statusMessageChange.emit(resetStatusMessage)">{{ resetAllLabel || 'Reset all settings' }}</button>
         <button type="button" class="usa-button usa-button--unstyled" (click)="close()">{{ closeLabel || 'Close' }}</button>
     </div>
