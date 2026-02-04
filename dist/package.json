@@ -1,0 +1,27 @@
+{
+  "name": "weiss-accessibility-center",
+  "version": "1.4.0",
+  "peerDependencies": {
+    "@angular/common": ">=15",
+    "@angular/core": ">=15",
+    "@angular/forms": ">=15",
+    "rxjs": "^7.8.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
+  },
+  "main": "dist/weiss-accessibility-center.js",
+  "module": "fesm2022/weiss-accessibility-center.mjs",
+  "typings": "index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/weiss-accessibility-center.mjs"
+    }
+  }
+}

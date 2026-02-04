@@ -1,0 +1,79 @@
+[data-weiss-accessibility-font-size="smaller"] {
+    --a11y-font-size-modifier: .85;
+    --a11y-line-height-modifier: 1;
+
+    --a11y-font-size-modifier-3xs: .95;
+    --a11y-font-size-modifier-2xs: .95;
+    --a11y-font-size-modifier-xs: .9;
+    --a11y-font-size-modifier-sm: .9;
+    --a11y-font-size-modifier-md: .85;
+    --a11y-font-size-modifier-lg: .8;
+    --a11y-font-size-modifier-xl: .75;
+    --a11y-font-size-modifier-2xl: .75;
+    --a11y-font-size-modifier-3xl: .7;
+}
+
+[data-weiss-accessibility-font-size="default"] {
+    --a11y-font-size-modifier: 1;
+    --a11y-line-height-modifier: 1;
+
+    // New variables for non-linear font-scaling
+    --a11y-font-size-modifier-3xs: 1;
+    --a11y-font-size-modifier-2xs: 1;
+    --a11y-font-size-modifier-xs: 1;
+    --a11y-font-size-modifier-sm: 1;
+    --a11y-font-size-modifier-md: 1;
+    --a11y-font-size-modifier-lg: 1;
+    --a11y-font-size-modifier-xl: 1;
+    --a11y-font-size-modifier-2xl: 1;
+    --a11y-font-size-modifier-3xl: 1;
+}
+
+[data-weiss-accessibility-font-size="large"] {
+    --a11y-font-size-modifier: 1.2;
+    --a11y-line-height-modifier: 1;
+    --a11y-spacing-modifier: 1.1;
+
+    --a11y-font-size-modifier-3xs: 1.325;
+    --a11y-font-size-modifier-2xs: 1.3;
+    --a11y-font-size-modifier-xs: 1.25;
+    --a11y-font-size-modifier-sm: 1.2;
+    --a11y-font-size-modifier-md: 1.2;
+    --a11y-font-size-modifier-lg: 1.15;
+    --a11y-font-size-modifier-xl: 1.1;
+    --a11y-font-size-modifier-2xl: 1.1;
+    --a11y-font-size-modifier-3xl: 1.05;
+}
+
+[data-weiss-accessibility-font-size="larger"] {
+    --a11y-font-size-modifier: 1.4;
+    --a11y-line-height-modifier: 1.1;
+    --a11y-spacing-modifier: 1.2;
+
+    --a11y-font-size-modifier-3xs: 1.5;
+    --a11y-font-size-modifier-2xs: 1.5;
+    --a11y-font-size-modifier-xs: 1.45;
+    --a11y-font-size-modifier-sm: 1.4;
+    --a11y-font-size-modifier-md: 1.4;
+    --a11y-font-size-modifier-lg: 1.35;
+    --a11y-font-size-modifier-xl: 1.3;
+    --a11y-font-size-modifier-2xl: 1.3;
+    --a11y-font-size-modifier-3xl: 1.25;
+}
+
+[data-weiss-accessibility-font-size="largest"] {
+    --a11y-font-size-modifier: 1.8;
+    --a11y-line-height-modifier: 1.2;
+    --a11y-spacing-modifier: 1.25;
+    --weiss-accessibility-panel-max-width: var(--usa-spacing-mobile-lg) !important;
+
+    --a11y-font-size-modifier-3xs: 1.9;
+    --a11y-font-size-modifier-2xs: 1.9;
+    --a11y-font-size-modifier-xs: 1.85;
+    --a11y-font-size-modifier-sm: 1.8;
+    --a11y-font-size-modifier-md: 1.8;
+    --a11y-font-size-modifier-lg: 1.65;
+    --a11y-font-size-modifier-xl: 1.5;
+    --a11y-font-size-modifier-2xl: 1.35;
+    --a11y-font-size-modifier-3xl: 1.3;
+}

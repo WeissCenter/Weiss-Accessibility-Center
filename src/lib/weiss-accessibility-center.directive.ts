@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 
 @Directive({
   selector: '[weissA11yToggle]',
+  standalone: true,
 })
 export class WeissAccessibilityToggleDirective implements OnInit, OnDestroy, OnChanges {
   @Input('weissA11yToggle') targetId!: string;

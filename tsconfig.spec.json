@@ -4,8 +4,11 @@
     "outDir": "./out-tsc/spec",
     "types": ["jest"],
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "isolatedModules": true,
+    "module": "ES2022",
+    "target": "ES2022",
+    "moduleResolution": "Bundler"
   },
   "files": [
     "setup-jest.ts"

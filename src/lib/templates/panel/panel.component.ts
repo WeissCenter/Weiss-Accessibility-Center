@@ -10,6 +10,8 @@ import {
   ViewChild,
   SimpleChanges,
 } from "@angular/core";
+import { CommonModule, AsyncPipe } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 import {
   PanelData,
   ModuleTypes,
@@ -18,6 +20,8 @@ import { WeissAccessibilityCenterService } from "../../weiss-accessibility-cente
 
 @Component({
   selector: "weiss-accessibility-panel",
+  standalone: true,
+  imports: [CommonModule, FormsModule, AsyncPipe],
   templateUrl: "./panel.component.html",
   styleUrl: "./panel.component.scss",
   encapsulation: ViewEncapsulation.None,

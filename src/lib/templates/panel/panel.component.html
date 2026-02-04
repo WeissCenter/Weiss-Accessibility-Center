@@ -50,7 +50,7 @@
                                     #radioInput
                                     name="accessibility-font-size"
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.fontSize"
-                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ fontSize: $event })"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ fontSize: $any($event) })"
                                     [value]="item.value" />
                                 <label class="usa-radio__label"
                                     for="accessibility-font-size-{{item.value}}">{{item.name}}</label>
@@ -79,7 +79,7 @@
                                     #radioInput
                                     name="accessibility-spacing"
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.spacing"
-                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ spacing: $event })"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ spacing: $any($event) })"
                                     [value]="item.value" />
                                 <label class="usa-radio__label"
                                     for="accessibility-spacing-{{item.value}}">{{item.name}}</label>
@@ -108,7 +108,7 @@
                                     id="accessibility-theme-{{item.value}}" type="radio" name="accessibility-theme"
                                     #radioInput
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.theme"
-                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ theme: $event })"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ theme: $any($event) })"
                                     [value]="item.value" />
                                 <label class="usa-radio__label"
                                     for="accessibility-theme-{{item.value}}">{{item.name}}</label>
@@ -136,7 +136,7 @@
                                     id="accessibility-layout-{{item.value}}" type="radio" name="accessibility-layout"
                                     #radioInput
                                     [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.layout"
-                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ layout: $event })"
+                                    (ngModelChange)="weissAccessibilityCenterService.updateSettings({ layout: $any($event) })"
                                     [value]="item.value" />
                                 <label class="usa-radio__label"
                                     for="accessibility-layout-{{item.value}}">{{item.name}}</label>

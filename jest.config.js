@@ -3,13 +3,13 @@ module.exports = {
   preset: 'jest-preset-angular',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
+  resolver: 'jest-preset-angular/build/resolvers/ng-jest-resolver',
   testMatch: [
     '<rootDir>/src/lib/accessibility-center.a11y.spec.ts',
     '<rootDir>/src/lib/panel_strip.integration.spec.ts'
   ],
-  transform: {
-    '^.+\\.(ts|mjs)$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json', isolatedModules: true }],
-  },
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|rxjs)'],
+  extensionsToTreatAsEsm: ['.ts'],
   moduleFileExtensions: ['ts', 'js', 'mjs', 'json', 'node'],
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   collectCoverageFrom: [

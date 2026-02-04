@@ -8,16 +8,15 @@ import { PanelComponent } from './templates/panel/panel.component';
 import { StripComponent } from './templates/strip/strip.component';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AsyncPipe,
     WeissAccessibilityCenterComponent,
     WeissAccessibilityToggleDirective,
     StripComponent,
     PanelComponent,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    AsyncPipe
   ],
   providers: [WeissAccessibilityCenterService],
   exports: [

@@ -122,7 +122,7 @@
                         <input [tabIndex]="dynamicTabIndexValue" class="usa-radio__input usa-radio__input--tile"
                             id="accessibility-{{module}}-{{item.value}}" type="radio" name="accessibility-{{module}}"
                             [ngModel]="(weissAccessibilityCenterService.weissAccessibilitySettings$ | async)?.[module]"
-                            (ngModelChange)="onSettingsChange(module, $event)" [value]="item.value" />
+                            (ngModelChange)="onSettingsChange(module, $any($event))" [value]="item.value" />
                         <label class="usa-radio__label"
                             for="accessibility-{{module}}-{{item.value}}">{{item.name}}</label>
                     </div>

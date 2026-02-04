@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { CommonModule, AsyncPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { WeissAccessibilityCenterService } from '../../weiss-accessibility-center.service';
 import { WeissAccessibilitySettings, ModuleTypes, PanelData } from '../../weiss-accessibility-center.interfaces';
 
 @Component({
   selector: 'weiss-accessibility-strip',
+  standalone: true,
+  imports: [CommonModule, FormsModule, AsyncPipe],
   templateUrl: './strip.component.html',
   styleUrl: './strip.component.scss',
   encapsulation: ViewEncapsulation.None,

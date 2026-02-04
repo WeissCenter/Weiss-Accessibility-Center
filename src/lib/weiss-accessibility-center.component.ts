@@ -10,6 +10,9 @@ import {
   Renderer2,
   ElementRef
 } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { PanelComponent } from "./templates/panel/panel.component";
+import { StripComponent } from "./templates/strip/strip.component";
 import {
   AccessibilityOptions,
   DisplayType,
@@ -24,6 +27,7 @@ import { Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: "weiss-accessibility-center",
+  standalone: true,
   template: `
     <div
       role="dialog"
@@ -77,6 +81,7 @@ import { Subject, takeUntil } from "rxjs";
         </div>
   `,
   encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, PanelComponent, StripComponent]
 })
 export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewInit {
   @ViewChild("center", { read: ElementRef }) centerEl!: ElementRef<HTMLElement>;
