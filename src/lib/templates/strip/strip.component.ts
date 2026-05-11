@@ -24,6 +24,8 @@ export class StripComponent {
   public selectedModule: ModuleTypes | undefined = undefined;
 
   public dynamicTabIndex: number = 3;
+
+  public readonly moduleOrder: ModuleTypes[] = ['fontSize', 'spacing', 'theme', 'layout', 'language'];
   
   @Input() closeSelectionPanel:boolean = false;
   public showSelectionPanel:boolean = false;
@@ -84,5 +86,13 @@ export class StripComponent {
     ) {
       this.showSelectionPanel = false;
     }
+  }
+
+  get initialModule(): ModuleTypes | null {
+    if (!this.data?.modules) {
+      return null;
+    }
+
+    return this.moduleOrder.find((module) => !!this.data?.modules?.[module]) ?? null;
   }
 }

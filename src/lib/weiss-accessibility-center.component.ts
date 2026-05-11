@@ -119,6 +119,7 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
 
   private firstFocusableElement: HTMLElement | null = null;
   private lastFocusableElement: HTMLElement | null = null;
+  private initialFocusElement: HTMLElement | null = null;
   private focusableElementsString =
     'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], li[tabindex="0"], li[tabindex="-1"], tr[tabindex="0"], tr[tabindex="-1"]';
 
@@ -185,14 +186,17 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
             this.centerEl?.nativeElement.querySelectorAll(
               this.focusableElementsString
             ) as NodeListOf<HTMLElement>;
+          this.initialFocusElement = this.getInitialFocusElement();
           this.firstFocusableElement = focusableElements[0];
           this.lastFocusableElement =
             focusableElements[focusableElements.length - 1];
 
           this.focusTimeoutId = window.setTimeout(() => {
-            this.firstFocusableElement?.focus();
+            (this.initialFocusElement ?? this.firstFocusableElement)?.focus();
             this.focusTimeoutId = null;
           }, 0);
+        } else {
+          this.initialFocusElement = null;
         }
       });
   }
@@ -229,7 +233,10 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
       if (event.key === "Tab") {
         if (event.shiftKey) {
           /* shift + tab */
-          if (deepActiveElement === this.firstFocusableElement) {
+          if (
+            deepActiveElement === this.firstFocusableElement ||
+            deepActiveElement === this.initialFocusElement
+          ) {
             event.preventDefault();
             this.lastFocusableElement?.focus();
           }
@@ -260,6 +267,12 @@ export class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewIn
         }, 0);
       }
     }
+  }
+
+  private getInitialFocusElement(): HTMLElement | null {
+    return this.centerEl?.nativeElement.querySelector<HTMLElement>(
+      '[data-weiss-initial-focus="true"]'
+    ) ?? null;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -1,7 +1,7 @@
 <section class="weiss-accessibility-center-panel" [ngClass]="{'weiss-accessibility-center-panel--right': data?.position === 'end' || data?.position === 'right', 'weiss-accessibility-center-panel--left': data?.position === 'start' || data?.position === 'left'}">
     <div class="weiss-accessibility-center-panel__header display-flex flex-column">
         <div class="display-flex flex-align-start gap-1 flex-justify">
-            <h2 id="accessibilityCenterTitle" class="margin-0">
+            <h2 id="accessibilityCenterTitle" class="margin-0" tabindex="-1" data-weiss-initial-focus="true">
                 {{data?.title}}
             </h2>
             <button type="button" class="usa-button usa-button--unstyled width-auto text-no-underline margin-left-auto"
