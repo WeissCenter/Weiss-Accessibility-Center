@@ -23,7 +23,8 @@
             <span *ngIf="data?.modules?.fontSize" role="listitem">
                 <h3 class="usa-accordion__heading">
                     <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" 
-                    aria-controls="accessibilityText" [attr.aria-expanded]="expand['fontSize']">
+                    aria-controls="accessibilityText" [attr.aria-expanded]="expand['fontSize']"
+                    (click)="toggleSection('fontSize')" (keydown)="handleKeyboardEvent($event, 'accessibilityText')">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2.25"
                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -62,7 +63,8 @@
             <span *ngIf="data?.modules?.spacing" role="listitem">
                 <h3 class="usa-accordion__heading">
                     <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" 
-                    aria-controls="accessibilitySpacing" [attr.aria-expanded]="expand['spacing']">
+                    aria-controls="accessibilitySpacing" [attr.aria-expanded]="expand['spacing']"
+                    (click)="toggleSection('spacing')" (keydown)="handleKeyboardEvent($event, 'accessibilitySpacing')">
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7l4 -4l4 4" /><path d="M8 17l4 4l4 -4" /><path d="M12 3l0 18" /></svg>
                         {{data?.modules?.spacing?.title}}
                     </button>
@@ -90,7 +92,7 @@
             </span>
             <span *ngIf="data?.modules?.theme" role="listitem">
                 <h3 class="usa-accordion__heading">
-                    <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" aria-controls="accessibilityTheme" [attr.aria-expanded]="expand['theme']">
+                    <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" aria-controls="accessibilityTheme" [attr.aria-expanded]="expand['theme']" (click)="toggleSection('theme')" (keydown)="handleKeyboardEvent($event, 'accessibilityTheme')">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2.25"
                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 3h-4a2 2 0 0 0 -2 2v12a4 4 0 0 0 8 0v-12a2 2 0 0 0 -2 -2" /><path d="M13 7.35l-2 -2a2 2 0 0 0 -2.828 0l-2.828 2.828a2 2 0 0 0 0 2.828l9 9" /><path d="M7.3 13h-2.3a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h12" /><path d="M17 17l0 .01" /></svg>
@@ -120,7 +122,8 @@
             <span *ngIf="data?.modules?.layout" role="listitem">
                 <h3 class="usa-accordion__heading">
                     <button type="button" #accordionButton class="usa-accordion__button display-flex flex-align-center gap-1" 
-                        aria-controls="accessibilityLayout" [attr.aria-expanded]="expand['layout']">
+                        aria-controls="accessibilityLayout" [attr.aria-expanded]="expand['layout']"
+                        (click)="toggleSection('layout')" (keydown)="handleKeyboardEvent($event, 'accessibilityLayout')">
                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M12 4l0 16" /></svg>
                         {{data?.modules?.layout?.title}}
                     </button>

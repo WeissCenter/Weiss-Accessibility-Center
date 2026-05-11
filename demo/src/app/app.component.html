@@ -1,0 +1,214 @@
+<a class="usa-skipnav" href="#main-content">Skip to main content</a>
+
+<div class="usa-overlay"></div>
+
+<header class="usa-header usa-header--basic demo-header">
+  <div class="usa-nav-container">
+    <div class="usa-navbar">
+      <div class="usa-logo" id="demo-logo">
+        <em class="usa-logo__text">
+          <a href="/" title="Accessibility Center Demo">
+            Accessibility Center Demo
+          </a>
+        </em>
+      </div>
+    </div>
+    <nav aria-label="Primary navigation" class="usa-nav">
+      <button
+        class="usa-button usa-button--outline"
+        id="weiss-a11y-toggle"
+        type="button"
+        weissA11yToggle="demo-accessibility-center"
+      >
+        Launch accessibility center
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+  <section class="usa-section demo-intro">
+    <div class="grid-container">
+      <div class="grid-row grid-gap">
+        <div class="tablet:grid-col-8">
+          <h1>Test the Weiss Accessibility Center locally</h1>
+          <p class="usa-intro">
+            Adjust the playground settings, launch the center, and verify how
+            local source changes behave against USWDS-structured content.
+          </p>
+        </div>
+        <div class="tablet:grid-col-4">
+          <div class="usa-alert usa-alert--info usa-alert--slim">
+            <div class="usa-alert__body">
+              <p class="usa-alert__text">
+                The demo imports the library from <code>src/public-api.ts</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="usa-section demo-workspace">
+    <div class="grid-container">
+      <div class="grid-row grid-gap-lg">
+        <aside class="tablet:grid-col-4 desktop:grid-col-3" aria-labelledby="settings-heading">
+          <form class="usa-form demo-settings">
+            <fieldset class="usa-fieldset">
+              <legend class="usa-legend" id="settings-heading">
+                Playground settings
+              </legend>
+
+              <label class="usa-label" for="display-type">Display type</label>
+              <select
+                class="usa-select"
+                id="display-type"
+                name="displayType"
+                [(ngModel)]="controls.displayType"
+                (ngModelChange)="syncOptions()"
+              >
+                <option *ngFor="let displayType of displayTypes" [ngValue]="displayType">
+                  {{ displayType }}
+                </option>
+              </select>
+
+              <label class="usa-label" for="position">Position</label>
+              <select
+                class="usa-select"
+                id="position"
+                name="position"
+                [(ngModel)]="controls.position"
+                (ngModelChange)="syncOptions()"
+              >
+                <option *ngFor="let position of positions" [ngValue]="position">
+                  {{ position }}
+                </option>
+              </select>
+
+              <div class="usa-checkbox demo-checkbox">
+                <input
+                  class="usa-checkbox__input"
+                  id="overlay"
+                  name="overlay"
+                  type="checkbox"
+                  [(ngModel)]="controls.overlay"
+                  (ngModelChange)="syncOptions()"
+                >
+                <label class="usa-checkbox__label" for="overlay">
+                  Use overlay
+                </label>
+              </div>
+
+              <div class="usa-checkbox demo-checkbox">
+                <input
+                  class="usa-checkbox__input"
+                  id="multi-select"
+                  name="multiSelectableAccordions"
+                  type="checkbox"
+                  [(ngModel)]="controls.multiSelectableAccordions"
+                  (ngModelChange)="syncOptions()"
+                >
+                <label class="usa-checkbox__label" for="multi-select">
+                  Multi-select accordions
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="usa-fieldset demo-module-list">
+              <legend class="usa-legend usa-legend--large">Features</legend>
+              <div class="usa-checkbox" *ngFor="let module of moduleKeys">
+                <input
+                  class="usa-checkbox__input usa-checkbox__input--tile"
+                  [id]="'module-' + module"
+                  [name]="'module-' + module"
+                  type="checkbox"
+                  [ngModel]="controls.modules[module]"
+                  (ngModelChange)="toggleModule(module, $event)"
+                >
+                <label class="usa-checkbox__label" [for]="'module-' + module">
+                  {{ moduleLabels[module] }}
+                  <span class="usa-checkbox__label-description">
+                    {{ moduleDescription(module) }}
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+          </form>
+        </aside>
+
+        <div class="tablet:grid-col-8 desktop:grid-col-9">
+          <section class="usa-prose demo-preview" aria-labelledby="preview-heading">
+            <h2 id="preview-heading">Preview content</h2>
+            <p>
+              This area uses USWDS page structures so typography, spacing,
+              theme, and layout changes have useful content to affect.
+            </p>
+
+            <div class="usa-summary-box" role="region" aria-labelledby="summary-heading">
+              <div class="usa-summary-box__body">
+                <h3 class="usa-summary-box__heading" id="summary-heading">
+                  Local testing checklist
+                </h3>
+                <div class="usa-summary-box__text">
+                  <ul class="usa-list">
+                    <li>Choose a panel or strip presentation.</li>
+                    <li>Change which feature modules render.</li>
+                    <li>Launch the center and verify document attributes.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-row grid-gap margin-top-4">
+              <div class="tablet:grid-col-6">
+                <h3>Current saved settings</h3>
+                <dl class="demo-settings-list" *ngIf="settings$ | async as settings">
+                  <div>
+                    <dt>Font size</dt>
+                    <dd>{{ settings.fontSize }}</dd>
+                  </div>
+                  <div>
+                    <dt>Theme</dt>
+                    <dd>{{ settings.theme }}</dd>
+                  </div>
+                  <div>
+                    <dt>Spacing</dt>
+                    <dd>{{ settings.spacing }}</dd>
+                  </div>
+                  <div>
+                    <dt>Layout</dt>
+                    <dd>{{ settings.layout }}</dd>
+                  </div>
+                  <div>
+                    <dt>Language</dt>
+                    <dd>{{ settings.language }}</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="tablet:grid-col-6">
+                <h3>Sample form</h3>
+                <label class="usa-label" for="demo-input">Email address</label>
+                <input
+                  class="usa-input"
+                  id="demo-input"
+                  name="demo-input"
+                  type="email"
+                  value="user@example.com"
+                >
+                <button class="usa-button margin-top-2" type="button">
+                  Sample action
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<weiss-accessibility-center
+  [options]="options"
+  [attr.data-demo-options]="options.displayType"
+></weiss-accessibility-center>

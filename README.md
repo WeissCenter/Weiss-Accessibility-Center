@@ -42,6 +42,24 @@ npm install git+https://github.com/WeissCenter/Weiss-Accessibility-Center#v1.3.0
 
 > Preferred usage: The accessibility center is now structured as standalone artifacts. New integrations should import and use the standalone `WeissAccessibilityCenterComponent` and `WeissAccessibilityToggleDirective`. The NgModule wrapper is retained for legacy compatibility.
 
+## Local Demo Playground
+
+Run the repo-local Angular playground when you want to test accessibility center changes without deploying another consuming project:
+
+```bash
+npm run demo
+```
+
+The playground imports the component and directive from `src/public-api.ts`, uses USWDS component structures for its page controls and sample content, and lets you change display type, position, overlay behavior, accordion behavior, and included feature modules before launching the accessibility center.
+
+The demo loads vanilla USWDS CSS and JavaScript, token defaults from `demo/a11y-center-tokens.scss`, project or generated CSS from `demo/styles.scss`, and then the accessibility center stylesheet from `src/lib/index.scss`. Keep generated USWDS+ CSS before `src/lib/index.scss` so the accessibility center's runtime CSS variables can override the project defaults.
+
+To verify the playground build without starting the dev server:
+
+```bash
+npm run build:demo
+```
+
 ### Preferred: Standalone Usage
 
 Import the component and directive directly into a standalone component (or any component that declares `imports`). No need to add `CommonModule`, `FormsModule`, or `AsyncPipe` — these are handled internally by the library.
@@ -431,5 +449,3 @@ layout: {
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-

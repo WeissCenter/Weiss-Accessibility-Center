@@ -1,0 +1,60 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "accessibility-center-demo": {
+      "projectType": "application",
+      "root": "demo",
+      "sourceRoot": "demo",
+      "prefix": "demo",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "demo/main.ts",
+            "tsConfig": "tsconfig.demo.json",
+            "outputPath": "dist/demo",
+            "index": "demo/index.html",
+            "styles": [
+              "node_modules/@uswds/uswds/dist/css/uswds.min.css",
+              "demo/styles.scss",
+              "src/lib/index.scss"
+            ],
+            "scripts": [
+              "node_modules/@uswds/uswds/dist/js/uswds.min.js"
+            ],
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "node_modules/@uswds/uswds/dist/img",
+                "output": "assets/uswds/img"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@uswds/uswds/dist/fonts",
+                "output": "assets/uswds/fonts"
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "accessibility-center-demo:build:development"
+          }
+        }
+      }
+    }
+  }
+}

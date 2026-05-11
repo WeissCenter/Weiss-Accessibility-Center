@@ -79,6 +79,18 @@ export class PanelComponent {
     );
   }
 
+  public toggleSection(module: ModuleTypes): void {
+    const shouldExpand = !this.expand[module];
+
+    if (!this.multiSelectable) {
+      this.moduleKeys.forEach((key) => {
+        this.expand[key] = false;
+      });
+    }
+
+    this.expand[module] = shouldExpand;
+  }
+
   ngOnInit() {
     if (this.data) {
       this.multiSelectable = this.data.multiSelectableAccordions?? false;

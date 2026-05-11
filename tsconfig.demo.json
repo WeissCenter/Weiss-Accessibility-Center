@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/demo",
+    "types": [],
+    "module": "ES2022",
+    "target": "ES2022",
+    "moduleResolution": "bundler"
+  },
+  "files": [
+    "demo/main.ts"
+  ],
+  "include": [
+    "demo/**/*.ts"
+  ],
+  "exclude": [
+    "demo/**/*.spec.ts",
+    "src/**/*.spec.ts"
+  ]
+}

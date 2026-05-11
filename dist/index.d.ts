@@ -117,6 +117,7 @@ declare class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewI
     data: PanelData | undefined;
     private firstFocusableElement;
     private lastFocusableElement;
+    private initialFocusElement;
     private focusableElementsString;
     statusMessage: string;
     forceCloseSelectionPanel: boolean;
@@ -136,6 +137,7 @@ declare class WeissAccessibilityCenterComponent implements OnDestroy, AfterViewI
     onStatusMessageChange(newMessage: string): void;
     private scrollElementIntoView;
     handleKeyboardEvent(event: KeyboardEvent): void;
+    private getInitialFocusElement;
     ngOnChanges(changes: SimpleChanges): void;
     setupOptions(): void;
     buildData(): PanelData;
@@ -175,6 +177,7 @@ declare class StripComponent {
     moduleKeys: ModuleTypes[];
     selectedModule: ModuleTypes | undefined;
     dynamicTabIndex: number;
+    readonly moduleOrder: ModuleTypes[];
     closeSelectionPanel: boolean;
     showSelectionPanel: boolean;
     toggleModule(item: ModuleTypes): void;
@@ -184,6 +187,7 @@ declare class StripComponent {
     onSettingsChange(module: ModuleTypes, value: string): void;
     ngOnInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
+    get initialModule(): ModuleTypes | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<StripComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<StripComponent, "weiss-accessibility-strip", never, { "data": { "alias": "data"; "required": false; }; "closeLabel": { "alias": "closeLabel"; "required": false; }; "resetLabel": { "alias": "resetLabel"; "required": false; }; "resetStatusMessage": { "alias": "resetStatusMessage"; "required": false; }; "closeSelectionPanel": { "alias": "closeSelectionPanel"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, true, never>;
 }
@@ -207,6 +211,7 @@ declare class PanelComponent {
     };
     constructor(weissAccessibilityCenterService: WeissAccessibilityCenterService);
     close(): void;
+    toggleSection(module: ModuleTypes): void;
     ngOnInit(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<PanelComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<PanelComponent, "weiss-accessibility-panel", never, { "data": { "alias": "data"; "required": false; }; "closeLabel": { "alias": "closeLabel"; "required": false; }; "resetAllLabel": { "alias": "resetAllLabel"; "required": false; }; "resetStatusMessage": { "alias": "resetStatusMessage"; "required": false; }; }, { "statusMessageChange": "statusMessageChange"; }, never, never, true, never>;

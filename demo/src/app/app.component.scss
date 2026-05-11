@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.demo-header {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.demo-intro {
+  background: var(--weiss-surface, #f7f9fb);
+}
+
+.demo-workspace {
+  padding-top: 2rem;
+}
+
+.demo-settings {
+  max-width: none;
+  position: sticky;
+  top: 1rem;
+}
+
+.demo-checkbox {
+  margin-top: 1rem;
+}
+
+.demo-module-list {
+  margin-top: 2rem;
+}
+
+.demo-preview {
+  max-width: none;
+}
+
+.demo-settings-list {
+  margin: 0;
+}
+
+.demo-settings-list > div {
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(7rem, 0.45fr) 1fr;
+  padding: 0.75rem 0;
+}
+
+.demo-settings-list dt {
+  font-weight: 700;
+}
+
+.demo-settings-list dd {
+  margin: 0;
+}
