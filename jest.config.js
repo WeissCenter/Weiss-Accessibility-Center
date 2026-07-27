@@ -10,7 +10,8 @@ module.exports = {
     '<rootDir>/src/lib/weiss-accessibility-center.component.spec.ts',
     '<rootDir>/src/lib/templates/panel/panel.component.spec.ts',
     '<rootDir>/src/lib/accessibility-center.a11y.spec.ts',
-    '<rootDir>/src/lib/panel_strip.integration.spec.ts'
+    '<rootDir>/src/lib/panel_strip.integration.spec.ts',
+    '<rootDir>/src/lib/templates/decorative-svg.a11y.spec.ts'
   ],
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|rxjs)'],
   extensionsToTreatAsEsm: ['.ts'],
